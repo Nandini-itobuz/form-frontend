@@ -1,0 +1,25 @@
+export enum Position{
+    FRONTEND_DEVELOPER ='Frontend Developer',
+    BACKEND_DEVELOPER = 'Backend Developer',
+    QA = 'QA',
+    INTERN = 'Intern'
+}
+
+
+export interface JobApplication {
+    _id?: string;
+    firstName: string ;
+    middleName?: string ;
+    age: number ;
+    lastName: string;
+    email: string;
+    phone: string;
+    position: string ;
+    institution: string 
+    degree: string ;
+    fieldOfStudy?: string ;
+    startDate?: Date ;
+    score: number 
+    yearsOfExperience: number ;
+    status: boolean ,
+}
