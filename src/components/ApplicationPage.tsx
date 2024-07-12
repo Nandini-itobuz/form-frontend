@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react"
-import GenericInput from "./GenericInput"
-import { JobApplication,Position } from "../interfaces/jobApplication"
 import { FC } from "react"
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios"
+import GenericInput from "./GenericInput"
+import { useEffect, useState } from "react"
+import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom"
+import { ToastContainer, toast } from 'react-toastify';
+import { JobApplication, Position } from "../interfaces/jobApplication"
 
 
 const ApplicationPage: FC = () => {
@@ -15,7 +15,6 @@ const ApplicationPage: FC = () => {
     const [formData, setFormData] = useState<JobApplication>(
         {
             firstName: '',
-            middleName: '',
             lastName: '',
             age: 0,
             phone: '',
@@ -24,26 +23,20 @@ const ApplicationPage: FC = () => {
             institution: '',
             degree: '',
             score: 0,
-            fieldOfStudy: '',
             position: Position.INTERN,
             status: false,
-            startDate: new Date()
+            startDate: ''
         })
-
 
     const handleFormEdit = async (): Promise<void> => {
         const urlParams = new URLSearchParams(window.location.search);
-        if(urlParams.get('id') === null) {
-            return ;
+        if (urlParams.get('id') === null) {
+            return;
         }
         const response = await axios.get(`http://localhost:3007/view-application/${urlParams.get('id')}`);
         setFormData(response.data.data)
         setId(urlParams.get('id'))
     }
-
-    useEffect(() => {
-        handleFormEdit();
-    }, [])
 
     const handleFormFeilds = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData((prev => ({ ...prev, [e.target.name]: e.target.value })))
@@ -51,9 +44,8 @@ const ApplicationPage: FC = () => {
 
     const handleFormSubmit = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         e.preventDefault();
-        if (formData.firstName === '' || formData.lastName === '' || formData.age === 0 || 
-            formData.email === ''  || formData.score === 0 || formData.institution === '') 
-            { toast("Enter requied feilds!"); return; }
+        if (formData.firstName === '' || formData.lastName === '' || formData.age === 0 ||
+            formData.email === '' || formData.score === 0 || formData.institution === '') { toast("Enter requied feilds!"); return; }
 
         const emailExpression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         const emailResult: boolean = emailExpression.test(formData.email);
@@ -62,6 +54,8 @@ const ApplicationPage: FC = () => {
         const phoneExpression: RegExp = /^[6-9]\d{9}$/;
         const phoneResult: boolean = phoneExpression.test(String(formData.phone));
         if (!phoneResult) { toast("Incorrect Phone!"); return; }
+
+        Object.keys(formData).forEach((key) => console.log(formData[key as keyof JobApplication]));
 
         if (id === null) {
             const response = await axios.post('http://localhost:3007/create-application', formData);
@@ -73,11 +67,15 @@ const ApplicationPage: FC = () => {
         }
     }
 
+    useEffect(() => {
+        handleFormEdit();
+    }, [])
+
     return (
         <>
             <ToastContainer />
             <form>
-                <div className=" bg-[#dedddd] p-5 ">
+                <div className=" bg-[#62abb4] p-5 ">
                     <h2 className=" flex justify-center sm:text-[35px] text-[20px] font-bold">
                         Job Application Form</h2>
                     <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
@@ -85,20 +83,20 @@ const ApplicationPage: FC = () => {
                         <br />
                         <div className="  grid grid-cols-12 gap-5 ">
                             <div className=" sm:col-span-6 col-span-12 ">
-                                <GenericInput name="firstName" typeOf="text" title="First Name" 
-                                req={true} value={formData.firstName} handleChange={handleFormFeilds} />
+                                <GenericInput name="firstName" typeOf="text" title="First Name"
+                                    req={true} value={formData.firstName} handleChange={handleFormFeilds} />
                             </div>
                             <div className=" sm:col-span-6 col-span-12">
                                 <GenericInput name="middleName" typeOf="text" title="Middle Name"
-                                 req={false} value={formData.middleName} handleChange={handleFormFeilds} />
+                                    req={false} value={formData.middleName} handleChange={handleFormFeilds} />
                             </div>
                             <div className=" sm:col-span-6 col-span-12">
                                 <GenericInput name="lastName" typeOf="text" title="Last Name"
-                                 req={true} value={formData.lastName} handleChange={handleFormFeilds} />
+                                    req={true} value={formData.lastName} handleChange={handleFormFeilds} />
                             </div>
                             <div className=" sm:col-span-6 col-span-12">
-                                <GenericInput name="age" typeOf="number" title="Age" 
-                                req={true} value={formData.age} handleChange={handleFormFeilds} />
+                                <GenericInput name="age" typeOf="number" title="Age"
+                                    req={true} value={formData.age} handleChange={handleFormFeilds} />
                             </div>
 
                         </div>
@@ -109,12 +107,12 @@ const ApplicationPage: FC = () => {
                         <br />
                         <div className="  grid grid-cols-12 gap-5 ">
                             <div className=" sm:col-span-6 col-span-12">
-                                <GenericInput name="phone" typeOf="tel" title="Phone Number" 
-                                req={true} value={formData.phone} handleChange={handleFormFeilds} />
+                                <GenericInput name="phone" typeOf="tel" title="Phone Number"
+                                    req={true} value={formData.phone} handleChange={handleFormFeilds} />
                             </div>
                             <div className=" sm:col-span-6 col-span-12">
-                                <GenericInput name="email" typeOf="email" title="Email" 
-                                req={true} value={formData.email} handleChange={handleFormFeilds} />
+                                <GenericInput name="email" typeOf="email" title="Email"
+                                    req={true} value={formData.email} handleChange={handleFormFeilds} />
                             </div>
                         </div>
                     </div>
@@ -125,23 +123,23 @@ const ApplicationPage: FC = () => {
                         <div className="  grid grid-cols-12 gap-5 ">
                             <div className=" sm:col-span-6 col-span-12">
                                 <GenericInput name="institution" typeOf="text"
-                                 title="Institution/University" req={true} value={formData.institution} handleChange={handleFormFeilds} />
+                                    title="Institution/University" req={true} value={formData.institution} handleChange={handleFormFeilds} />
                             </div>
                             <div className=" sm:col-span-6 col-span-12">
-                                <GenericInput name="degree" typeOf="text" title="Degree" 
-                                req={true} value={formData.degree} handleChange={handleFormFeilds} />
+                                <GenericInput name="degree" typeOf="text" title="Degree"
+                                    req={true} value={formData.degree} handleChange={handleFormFeilds} />
                             </div>
                             <div className=" sm:col-span-6 col-span-12">
                                 <GenericInput name="fieldOfStudy" typeOf="text" title="Specification" 
-                                req={false} value={formData.fieldOfStudy} handleChange={handleFormFeilds} />
+                                    req={false} value={formData.fieldOfStudy} handleChange={handleFormFeilds} />
                             </div>
                             <div className=" sm:col-span-6 col-span-12">
-                                <GenericInput name="score" typeOf="number" title="Score" 
-                                req={true} value={formData.score} handleChange={handleFormFeilds} />
+                                <GenericInput name="score" typeOf="number" title="Score"
+                                    req={true} value={formData.score} handleChange={handleFormFeilds} />
                             </div>
                             <div className=" sm:col-span-6 col-span-12">
-                                <GenericInput name="startDate" typeOf="date" title="Start Date" 
-                                req={true} value={formData.startDate} handleChange={handleFormFeilds} />
+                                <GenericInput name="startDate" typeOf="date" title="Start Date"
+                                    req={true} value={formData.startDate?.slice(0,10)} handleChange={handleFormFeilds} />
                             </div>
                         </div>
                     </div>
@@ -156,7 +154,7 @@ const ApplicationPage: FC = () => {
                                     <div className=" font-medium">what postion are you looking for?
                                         <sup >*</sup></div>
                                     <select name="position" value={formData.position} className=" py-2 gap-1 w-[90%] bg-[#f5f5f5] border-0 outline-none" onChange={handleFormFeilds}>
-                                    <option >Positions</option>
+                                        <option >Positions</option>
                                         <option value={Position.FRONTEND_DEVELOPER}>Frontend Developer</option>
                                         <option value={Position.BACKEND_DEVELOPER}>Backend Developer</option>
                                         <option value={Position.INTERN}>Intern</option>

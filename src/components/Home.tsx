@@ -1,29 +1,49 @@
 import { useEffect, useState } from "react";
 import Button from "./Button"
 import { useNavigate } from "react-router-dom";
-import { MdCancel } from "react-icons/md";
 import axios from "axios";
 import { JobApplication, Position } from "../interfaces/jobApplication";
 import TableContent from "./TableContent";
+import Swal from 'sweetalert2'
 
 const Home = () => {
-  const [show, setShow] = useState<boolean>(false);
   const [allForms, setAllForms] = useState<JobApplication[]>([]);
+
+  const [page, setPage] = useState<string>('1');
+  const [pageSize, setPageSize] = useState<string>('5');
+  const [totalPages, setTotalPages] = useState(1);
+
   const [showFilteredPosition, setShowFiltereddPosition] = useState<string>('Sort By')
-  const [id, setId] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleViewStatus = (): void => {
-    navigate(`/status?id=${id}`)
+  const getAllUser = async (): Promise<void> => {
+    const response = await axios.get(`http://localhost:3007/view-applications/${page}/${pageSize}`);
+    setTotalPages(response.data.data.totalPages)
+    setAllForms(response.data.data.applicationData);
+    console.log(response)
   }
 
-  const getAllUser = async (): Promise<void> => {
-    const response = await axios.get('http://localhost:3007/view-applications');
-    setAllForms(response.data.data);
+  const handleDeleteAppliaction = async (id: string): Promise<void> => {
+    await axios.delete(`http://localhost:3007/delete-application/${id}`);
+    getAllUser();
   }
 
   const handleDelete = async (id: string): Promise<void> => {
-    await axios.delete(`http://localhost:3007/delete-application/${id}`);
+    Swal.fire({
+      title: "Do you want to save the changes?",
+      showDenyButton: true,
+      confirmButtonText: "Delete",
+      denyButtonText: `Cancel`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDeleteAppliaction(id);
+        Swal.fire("Deleted successfully!", "", "success");
+      }
+    });
+  }
+
+  const deleteApplications = async (): Promise<void> => {
+    await axios.delete('http://localhost:3007/delete-all-applications');
     getAllUser();
   }
 
@@ -33,45 +53,54 @@ const Home = () => {
     setAllForms(response.data.data);
   }
 
+  const deleteAllApplications = async (): Promise<void> => {
+    Swal.fire({
+      title: "Do you want to save the changes?",
+      showDenyButton: true,
+      confirmButtonText: "Delete",
+      denyButtonText: `Cancel`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteApplications();
+        Swal.fire("Deleted successfully!", "", "success");
+      }
+    });
+  }
+
   useEffect(() => {
     getAllUser();
-  }, [])
+  }, [page])
 
   return (
-    <div className=" h-[100vh] w-[100vw] flex flex-col gap-3  py-5 items-center font-[forum]">
-      <div className=" flex gap-10">
-        <Button handleClick={() => { navigate('/form') }}>Add job Application</Button>
-        <Button handleClick={() => { setShow(true) }}>View Status</Button>
-        <Button handleClick={getAllUser}>All</Button>
-        <div className="hover:cursor-pointer py-2 px-10 bg-[#f5f5f5] font-bold">
-          <select title="Sort By" value={showFilteredPosition} onChange={handlePositionChange} className=" bg-[#f5f5f5]  outline-none" >
-            <option value=''>Sort By</option>
-            <option value={Position.FRONTEND_DEVELOPER}  >{Position.FRONTEND_DEVELOPER}</option>
-            <option value={Position.BACKEND_DEVELOPER} >{Position.BACKEND_DEVELOPER}</option>
-            <option value={Position.QA}  >{Position.QA}</option>
-            <option value={Position.INTERN} >{Position.INTERN}</option>
-          </select>
-        </div>
-      </div>
-
-      <div  className=" my-10">
-        <span className=" font-bold">Applications</span>
-        {allForms.map((ele) => (
-          <TableContent key={ele._id} handleDelete={handleDelete} age={ele.age} email={ele.email} position={ele.position} firstName={ele.firstName} lastName={ele.lastName} id={ele._id} />
-        ))}
-      </div>
-
-      {show &&
-        <div className=" flex gap-2 justify-center items-center bg-[#f5f5f5] px-2 w-[100vw] 
-        max-w-[400px]">
-          <h2>Enter your id :</h2>
-          <input value={id} className="py-2 gap-1  bg-[#f5f5f5] border-0 outline-none"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setId(e.target.value) }} type="text" />
-          <button className=" bg-white px-4" onClick={handleViewStatus}>View</button>
-          <div className=" hover:cursor-pointer" onClick={(): void => { setShow(false) }}><MdCancel />
+    <div className=" h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center  font-[forum] bg-[#62abb4] ">
+      <div>
+        <div className=" grid grid-cols-12 md:gap-10 gap-2 px-2 justify-center items-center">
+          <Button handleClick={() => { navigate('/form') }}>Add </Button>
+          <Button handleClick={getAllUser}>View All</Button>
+          <Button handleClick={deleteAllApplications}>Delete All</Button>
+          <div className=" md:col-span-3 col-span-6 hover:cursor-pointer py-2 px-10 bg-[#f5f5f5] font-bold">
+            <select name="Sort By" value={showFilteredPosition} onChange={handlePositionChange} className=" bg-[#f5f5f5]   w-[100%] outline-none" >
+              <option disabled >Sort By</option>
+              <option value={Position.FRONTEND_DEVELOPER} >{Position.FRONTEND_DEVELOPER}</option>
+              <option value={Position.BACKEND_DEVELOPER} >{Position.BACKEND_DEVELOPER}</option>
+              <option value={Position.QA} >{Position.QA}</option>
+              <option value={Position.INTERN} >{Position.INTERN}</option>
+            </select>
           </div>
         </div>
-      }
+
+        <div className=" my-10 xl:px-10 ">
+          {allForms.length ? allForms.map((ele) => (
+            <TableContent key={ele._id} handleDelete={handleDelete} age={ele.age} email={ele.email} position={ele.position} firstName={ele.firstName} lastName={ele.lastName} id={ele._id} />
+          )) : <span className=" font-bold text-[20px] text-white">No Data Available</span>}
+        </div>
+      </div>
+
+      <div className=" flex gap-2 mb-10">
+        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) - 1 >=1 && setPage((Number(page) - 1).toString())}}>Previous</button>
+        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" >{page}</button>
+        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) + 1 <= totalPages && setPage((Number(page) + 1).toString())}}>Next</button>
+      </div>
 
     </div>
   )
