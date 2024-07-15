@@ -141,8 +141,7 @@ const ApplicationPage: FC = () => {
                     Job Application Form</h2>
 
                 <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
-                    <p className=" font-bold" >Personal Information</p>
-                    <br />
+                    <p className=" font-bold mb-5" >Personal Information</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {personalInputFields.map((ele) => (
                                 <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
@@ -151,8 +150,7 @@ const ApplicationPage: FC = () => {
                 </div>
 
                 <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
-                    <p className=" font-bold" >Contact Details</p>
-                    <br />
+                    <p className=" font-bold mb-5" >Contact Details</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {contactInputFields.map((ele) => (
                                 <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
@@ -161,8 +159,7 @@ const ApplicationPage: FC = () => {
                 </div>
 
                 <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
-                    <p className=" font-bold" >Educational History</p>
-                    <br />
+                    <p className=" font-bold mb-5" >Educational History</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {educaionalInputFields.map((ele) => (
                                 <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
@@ -171,8 +168,7 @@ const ApplicationPage: FC = () => {
                 </div>
 
                 <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
-                    <p className=" font-bold" >Job Details</p>
-                    <br />
+                    <p className=" font-bold mb-5" >Job Details</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         <div className=" sm:col-span-6 col-span-12">
 
