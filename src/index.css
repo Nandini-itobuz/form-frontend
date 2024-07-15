@@ -2,15 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+*{
+  font-family: 'Roboto';
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-} */
+.confirm-button-class {
+  background-color: #62ABB4;
+  padding: 10px 20px;
+  color : white;
+  outline: none;
+  font-weight : bold;
+  border: 0
+}
 
+.title-class{
+  font-weight: 500;
+  color: black;
+}

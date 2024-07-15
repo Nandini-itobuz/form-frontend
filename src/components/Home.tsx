@@ -29,10 +29,16 @@ const Home = () => {
 
   const handleDelete = async (id: string): Promise<void> => {
     Swal.fire({
-      title: "Do you want to save the changes?",
+      title: "Delete item?",
       showDenyButton: true,
       confirmButtonText: "Delete",
-      denyButtonText: `Cancel`
+      denyButtonText: `Cancel`,
+      customClass: {
+        confirmButton: 'confirm-button-class',
+        denyButton: 'confirm-button-class',
+        title: 'title-class',
+        icon: 'icon-class'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         handleDeleteAppliaction(id);
@@ -54,10 +60,16 @@ const Home = () => {
 
   const deleteAllApplications = async (): Promise<void> => {
     Swal.fire({
-      title: "Do you want to save the changes?",
+      title: "Delete All Items?",
       showDenyButton: true,
       confirmButtonText: "Delete",
-      denyButtonText: `Cancel`
+      denyButtonText: `Cancel`,
+      customClass: {
+        confirmButton: 'confirm-button-class',
+        denyButton: 'confirm-button-class',
+        title: 'title-class',
+        icon: 'icon-class'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         deleteApplications();
@@ -71,10 +83,10 @@ const Home = () => {
   }, [page])
 
   return (
-    <div className=" h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center  font-[forum] bg-[#62abb4] ">
+    <div className=" min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto] bg-[#62abb4] ">
       <div>
         <div className=" grid grid-cols-12 md:gap-10 gap-2 px-2 justify-center items-center">
-          <Button handleClick={() => { navigate('/form') }}>Add </Button>
+          <Button handleClick={() => { navigate('/create-edit-form') }}>Add </Button>
           <Button handleClick={getAllUser}>View All</Button>
           <Button handleClick={deleteAllApplications}>Delete All</Button>
           <div className=" md:col-span-3 col-span-6 hover:cursor-pointer py-2 px-10 bg-[#f5f5f5] font-bold">
@@ -96,9 +108,9 @@ const Home = () => {
       </div>
 
       <div className=" flex gap-2 mb-10">
-        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) - 1 >=1 && setPage((Number(page) - 1).toString())}}>Previous</button>
+        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString()) }}>Previous</button>
         <button className="py-2 px-5 bg-[#f5f5f5] font-bold" >{page}</button>
-        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) + 1 <= totalPages && setPage((Number(page) + 1).toString())}}>Next</button>
+        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) + 1 <= totalPages && setPage((Number(page) + 1).toString()) }}>Next</button>
       </div>
 
     </div>

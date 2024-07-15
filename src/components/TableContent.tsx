@@ -18,7 +18,7 @@ const TableContent: FC<TableContent> = ({ handleDelete, firstName, lastName, id,
 
 	const navigate = useNavigate();
 	const handleEdit = () => {
-		navigate(`/form?id=${id}`)
+		navigate(`/create-edit-form?id=${id}`)
 	}
 
 	return (

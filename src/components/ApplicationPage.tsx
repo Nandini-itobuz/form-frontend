@@ -6,45 +6,29 @@ import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
-import { JobApplication,Position } from "../interfaces/jobApplication"
+import { JobApplication } from "../interfaces/jobApplication"
 
 
 const ApplicationPage: FC = () => {
 
     const navigate = useNavigate();
     const [id, setId] = useState<string | null>(null);
-    const [formData, setFormData] = useState<JobApplication >({
-        firstName: '',
-        lastName: '',
-        age: 0,
-        phone: '',
-        email: '',
-        yearsOfExperience: 0,
-        institution: '',
-        degree: '',
-        score: 0,
-        position: Position.INTERN,
-        status: false,
-        startDate: ''
-    })
+    const [formData, setFormData] = useState<JobApplication>()
 
-    const personalInputFeilds = [
+    const personalInputFields = [
         {
             name: 'firstName',
-            type: 'text',
             title: 'First Name',
             value: formData?.firstName,
         },
         {
             name: 'middleName',
-            type: 'text',
             required: false,
             title: 'Middle Name',
-            value: formData?.firstName,
+            value: formData?.middleName,
         },
         {
             name: 'lastName',
-            type: 'text',
             title: 'Last Name',
             value: formData?.lastName,
         },
@@ -56,7 +40,7 @@ const ApplicationPage: FC = () => {
         }
     ]
 
-    const contactInputFeilds = [
+    const contactInputFields = [
         {
             name: 'phone',
             type: 'tel',
@@ -65,23 +49,20 @@ const ApplicationPage: FC = () => {
         },
         {
             name: 'email',
-            type: 'text',
             title: 'Email Id',
             value: formData?.email,
         }
     ]
 
-    const educaionalInputFeilds =
+    const educaionalInputFields =
         [
             {
                 name: 'institution',
-                type: 'text',
                 title: 'Institution/University',
                 value: formData?.institution,
             },
             {
                 name: 'degree',
-                type: 'text',
                 title: 'Degree',
                 value: formData?.degree,
             }, {
@@ -104,7 +85,7 @@ const ApplicationPage: FC = () => {
             }
         ]
 
-    const jobInputFeilds =
+    const jobInputFields =
         [
             {
                 name: 'yearsOfExperience',
@@ -124,25 +105,28 @@ const ApplicationPage: FC = () => {
     }
 
     const handleFormFeilds = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormData((prev => ({ ...prev, [e.target.name]: e.target.value })))
+        setFormData((prev => (prev && { ...prev, [e.target.name]: e.target.value })))
     }
 
     const handleFormSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        if (!formData?.firstName || !formData?.lastName  || !formData?.age ||
-            !formData?.email || !formData?.score || !formData?.institution) { return toast("Enter requied feilds!");  }
+        if (!formData?.firstName || !formData?.lastName || !formData?.age ||
+            !formData?.email || !formData?.score || !formData?.institution) { return toast("Enter requied feilds!"); }
 
         const emailExpression: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         const emailResult: boolean = emailExpression.test(String(formData?.email));
-        if (!emailResult) { console.log(formData);return toast("Incorrect E-mail!") }
+        if (!emailResult) { return toast("Incorrect E-mail!") }
 
         // const phoneExpression: RegExp = /^[6-9]\d{9}$/;
         // const phoneResult: boolean = phoneExpression.test(String(formData?.phone));
         // if (!phoneResult) { return toast("Incorrect Phone!"); }
 
+        const currentDate = new Date();
+        const formDate = new Date(String(formData?.startDate));
+        if (formDate > currentDate) { return toast('Invalid date') }
+
         const response = !id ? await axios.post('http://localhost:4000/create-application', formData) :
             await axios.put(`http://localhost:4000/update-application/${id}`, formData);
-            console.log(response)
         response.data.data && navigate('/')
     }
 
@@ -161,10 +145,8 @@ const ApplicationPage: FC = () => {
                     <p className=" font-bold" >Personal Information</p>
                     <br />
                     <div className="  grid grid-cols-12 gap-5 ">
-                        {personalInputFeilds.map((ele) => (
-                            <div key={ele.name} className=" sm:col-span-6 col-span-12 ">
-                                <GenericInput inputProps={ele} handleChange={handleFormFeilds} />
-                            </div>
+                        {personalInputFields.map((ele) => (
+                                <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
                         ))}
                     </div>
                 </div>
@@ -173,10 +155,8 @@ const ApplicationPage: FC = () => {
                     <p className=" font-bold" >Contact Details</p>
                     <br />
                     <div className="  grid grid-cols-12 gap-5 ">
-                        {contactInputFeilds.map((ele) => (
-                            <div key={ele.name} className=" sm:col-span-6 col-span-12 ">
-                                <GenericInput inputProps={ele} handleChange={handleFormFeilds} />
-                            </div>
+                        {contactInputFields.map((ele) => (
+                                <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
                         ))}
                     </div>
                 </div>
@@ -185,10 +165,8 @@ const ApplicationPage: FC = () => {
                     <p className=" font-bold" >Educational History</p>
                     <br />
                     <div className="  grid grid-cols-12 gap-5 ">
-                        {educaionalInputFeilds.map((ele) => (
-                            <div key={ele.name} className=" sm:col-span-6 col-span-12 ">
-                                <GenericInput inputProps={ele} handleChange={handleFormFeilds} />
-                            </div>
+                        {educaionalInputFields.map((ele) => (
+                                <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
                         ))}
                     </div>
                 </div>
@@ -203,10 +181,8 @@ const ApplicationPage: FC = () => {
                                 <SelectInput value={formData?.position} title="What position are you looking for?" req={false} handleChange={handleFormFeilds} name="position" />
                             </div>
                         </div>
-                        {jobInputFeilds.map((ele) => (
-                            <div key={ele.name} className=" sm:col-span-6 col-span-12 ">
-                                <GenericInput inputProps={ele} handleChange={handleFormFeilds} />
-                            </div>
+                        {jobInputFields.map((ele) => (
+                                <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
                         ))}
                     </div>
                 </div>

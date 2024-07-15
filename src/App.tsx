@@ -8,7 +8,7 @@ const App: FC = () => {
   return <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path='/form' element={<ApplicationPage />} />
+      <Route path='/create-edit-form' element={<ApplicationPage />} />
     </Routes>
   </BrowserRouter>
 };

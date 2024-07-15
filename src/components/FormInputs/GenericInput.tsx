@@ -16,10 +16,12 @@ interface GenericInputProps {
 
 const GenericInput: FC<GenericInputProps> = ({ inputProps, handleChange }) => {
   return (
-    <div className=" flex flex-col ">
-      <div className=" font-medium">{inputProps?.title}</div>
-      <input {...inputProps} required={true || inputProps?.required}
-        onChange={handleChange} className=" px-2 py-2 gap-1 sm:w-[90%] w-[100%] bg-[#f5f5f5] border-0 outline-none" />
+    <div key={inputProps.name} className=" sm:col-span-6 col-span-12 ">
+      <div className=" flex flex-col ">
+        <div className=" font-medium">{inputProps?.title}</div>
+        <input {...inputProps} required={true || inputProps?.required} type ={"text" || inputProps?.type}
+          onChange={handleChange} className=" px-2 py-2 gap-1 sm:w-[90%] w-[100%] bg-[#f5f5f5] border-0 outline-none" />
+      </div>
     </div>
   )
 }
