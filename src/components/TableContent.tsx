@@ -15,7 +15,6 @@ interface TableContent {
 }
 
 const TableContent: FC<TableContent> = ({ handleDelete, firstName, lastName, id, age, email, position }) => {
-
 	const navigate = useNavigate();
 	const handleEdit = () => {
 		navigate(`/create-edit-form?id=${id}`)

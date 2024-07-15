@@ -10,7 +10,7 @@ const Home = () => {
   const [allForms, setAllForms] = useState<JobApplication[]>([]);
 
   const [page, setPage] = useState<string>('1');
-  const [pageSize, setPageSize] = useState<string>('7');
+  const [pageSize, setPageSize] = useState<string>('5');
   const [totalPages, setTotalPages] = useState(1);
 
   const [showFilteredPosition, setShowFiltereddPosition] = useState<string>('Sort By')

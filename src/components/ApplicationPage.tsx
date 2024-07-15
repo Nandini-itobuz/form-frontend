@@ -6,14 +6,27 @@ import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
-import { JobApplication } from "../interfaces/jobApplication"
+import { JobApplication, Position } from "../interfaces/jobApplication"
 
 
 const ApplicationPage: FC = () => {
 
     const navigate = useNavigate();
     const [id, setId] = useState<string | null>(null);
-    const [formData, setFormData] = useState<JobApplication>()
+    const [formData, setFormData] = useState<JobApplication>({
+        firstName: '',
+        lastName: '',
+        age: 0,
+        phone: '',
+        email: '',
+        yearsOfExperience: 0,
+        institution: '',
+        degree: '',
+        score: 0,
+        position: Position.INTERN,
+        status: false,
+        startDate: ''
+    })
 
     const personalInputFields = [
         {
@@ -82,7 +95,7 @@ const ApplicationPage: FC = () => {
                 required: false,
                 value: formData?.startDate?.slice(0, 10),
             }
-        ]
+    ]
 
     const jobInputFields =
         [
@@ -92,8 +105,7 @@ const ApplicationPage: FC = () => {
                 title: 'Years Of Experience',
                 value: formData?.yearsOfExperience,
             }
-        ]
-
+    ]
 
     const handleFormEdit = async (): Promise<void> => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -103,15 +115,15 @@ const ApplicationPage: FC = () => {
         setId(urlParams.get('id'))
     }
 
-    const handleFormFeilds = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        console.log(e.target)
-        setFormData((prev => (prev && { ...prev, [e.target.name]: e.target.value })))
+    const handleFormFeilds = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)  => {
+        setFormData((prev => ({ ...prev, [e.target.name]: e.target.value })))
     }
 
     const handleFormSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        if (!formData?.firstName || !formData?.lastName || !formData?.age ||
-            !formData?.email || !formData?.score || !formData?.institution) { return toast("Enter requied feilds!"); }
+        if (!formData?.firstName || !formData?.lastName || formData?.age === 0 ||
+            !formData?.email || formData?.score === 0 || !formData?.degree || formData?.yearsOfExperience === 0 || !formData?.position ||
+             !formData?.institution) { return toast("Enter requied feilds!"); }
 
         const emailExpression: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         const emailResult: boolean = emailExpression.test(String(formData?.email));

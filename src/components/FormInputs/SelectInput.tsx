@@ -18,7 +18,7 @@ const SelectInput: FC<selectInputInterface> = ({ handleChange, title, req, value
 			<select name={name} value={value} className=" py-2 gap-1 w-[90%] bg-[#f5f5f5] border-0 outline-none" 
 				onChange={handleChange}
 			>
-				<option >Positions</option>
+				<option  disabled>Positions</option>
 				<option value={Position.FRONTEND_DEVELOPER}>Frontend Developer</option>
 				<option value={Position.BACKEND_DEVELOPER}>Backend Developer</option>
 				<option value={Position.INTERN}>Intern</option>
