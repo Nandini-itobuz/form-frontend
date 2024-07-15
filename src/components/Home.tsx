@@ -10,21 +10,20 @@ const Home = () => {
   const [allForms, setAllForms] = useState<JobApplication[]>([]);
 
   const [page, setPage] = useState<string>('1');
-  const [pageSize, setPageSize] = useState<string>('5');
+  const [pageSize, setPageSize] = useState<string>('7');
   const [totalPages, setTotalPages] = useState(1);
 
   const [showFilteredPosition, setShowFiltereddPosition] = useState<string>('Sort By')
   const navigate = useNavigate();
 
   const getAllUser = async (): Promise<void> => {
-    const response = await axios.get(`http://localhost:3007/view-applications/${page}/${pageSize}`);
+    const response = await axios.get(`http://localhost:4000/view-applications/${page}/${pageSize}`);
     setTotalPages(response.data.data.totalPages)
     setAllForms(response.data.data.applicationData);
-    console.log(response)
   }
 
   const handleDeleteAppliaction = async (id: string): Promise<void> => {
-    await axios.delete(`http://localhost:3007/delete-application/${id}`);
+    await axios.delete(`http://localhost:4000/delete-application/${id}`);
     getAllUser();
   }
 
@@ -43,13 +42,13 @@ const Home = () => {
   }
 
   const deleteApplications = async (): Promise<void> => {
-    await axios.delete('http://localhost:3007/delete-all-applications');
+    await axios.delete('http://localhost:4000/delete-all-applications');
     getAllUser();
   }
 
   const handlePositionChange = async (e: React.ChangeEvent<HTMLSelectElement>): Promise<void> => {
     setShowFiltereddPosition(e.target.value)
-    const response = await axios.get(`http://localhost:3007/view-applications/${e.target.value}`)
+    const response = await axios.get(`http://localhost:4000/view-applications/${e.target.value}`)
     setAllForms(response.data.data);
   }
 
@@ -91,7 +90,7 @@ const Home = () => {
 
         <div className=" my-10 xl:px-10 ">
           {allForms.length ? allForms.map((ele) => (
-            <TableContent key={ele._id} handleDelete={handleDelete} age={ele.age} email={ele.email} position={ele.position} firstName={ele.firstName} lastName={ele.lastName} id={ele._id} />
+            <TableContent key={ele._id} handleDelete={handleDelete} age={ele?.age} email={ele?.email} position={ele?.position} firstName={ele?.firstName} lastName={ele?.lastName} id={ele?._id} />
           )) : <span className=" font-bold text-[20px] text-white">No Data Available</span>}
         </div>
       </div>

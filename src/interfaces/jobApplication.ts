@@ -7,7 +7,7 @@ export enum Position{
 
 
 export interface JobApplication {
-    _id?: string;
+    _id?: string ;
     firstName: string ;
     middleName?: string ;
     age: number ;
@@ -15,11 +15,11 @@ export interface JobApplication {
     email: string;
     phone: string;
     position: string ;
-    institution: string 
+    institution: string ;
     degree: string ;
     fieldOfStudy?: string ;
     startDate?: string ;
-    score: number 
+    score: number ;
     yearsOfExperience: number ;
-    status: boolean ,
+    status: boolean 
 }
