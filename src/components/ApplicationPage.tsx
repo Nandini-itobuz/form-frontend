@@ -67,7 +67,6 @@ const ApplicationPage: FC = () => {
                 value: formData?.degree,
             }, {
                 name: 'fieldOfStudy',
-                type: 'text',
                 title: 'Feild of Study',
                 required: false,
                 value: formData?.fieldOfStudy,
