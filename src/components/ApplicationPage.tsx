@@ -104,6 +104,7 @@ const ApplicationPage: FC = () => {
     }
 
     const handleFormFeilds = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        console.log(e.target)
         setFormData((prev => (prev && { ...prev, [e.target.name]: e.target.value })))
     }
 
@@ -171,7 +172,6 @@ const ApplicationPage: FC = () => {
                     <p className=" font-bold mb-5" >Job Details</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         <div className=" sm:col-span-6 col-span-12">
-
                             <div className=" flex flex-col ">
                                 <SelectInput value={formData?.position} title="What position are you looking for?" req={false} handleChange={handleFormFeilds} name="position" />
                             </div>
