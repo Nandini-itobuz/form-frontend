@@ -1,21 +1,28 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./Button"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { JobApplication, Position } from "../interfaces/jobApplication";
+import { JobApplication } from "../interfaces/jobApplication";
+import { Position } from "../enums/positions";
 import TableContent from "./TableContent";
 import Swal from 'sweetalert2'
+import SelectInput from "./FormInputs/SelectInput";
+import { PageSize } from "../enums/pageSize"
 
 const Home = () => {
-  const [allForms, setAllForms] = useState<JobApplication[]>([]);
 
-  const [page, setPage] = useState<string>('1');
-  const [pageSize, setPageSize] = useState<string>('5');
-  const [totalPages, setTotalPages] = useState(1);
-
-  const [showFilteredPosition, setShowFiltereddPosition] = useState<string>('Sort By')
   const navigate = useNavigate();
+  const [page, setPage] = useState<string>('1');
+  const [totalPages, setTotalPages] = useState<string>('1');
+  const [allForms, setAllForms] = useState<JobApplication[]>([]);
+  const [showFilteredPosition, setShowFiltereddPosition] = useState<string>('Sort By')
 
+  const availablePositions = [Position.FRONTEND_DEVELOPER, Position.BACKEND_DEVELOPER, Position.INTERN, Position.QA];
+  const pageSizeOptions: string[] = [PageSize.THREE, PageSize.FIVE, PageSize.TEN,
+  PageSize.TWLEVE, PageSize.FIFTEEN, PageSize.TWENTY];
+  const [pageSize, setPageSize] = useState<string>(pageSizeOptions[0]);
+
+  
   const getAllUser = async (): Promise<void> => {
     const response = await axios.get(`http://localhost:4000/view-applications/${page}/${pageSize}`);
     setTotalPages(response.data.data.totalPages)
@@ -80,7 +87,7 @@ const Home = () => {
 
   useEffect(() => {
     getAllUser();
-  }, [page])
+  }, [page, pageSize])
 
   return (
     <div className=" min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto] bg-[#62abb4] ">
@@ -89,28 +96,29 @@ const Home = () => {
           <Button handleClick={() => { navigate('/create-edit-form') }}>Add </Button>
           <Button handleClick={getAllUser}>View All</Button>
           <Button handleClick={deleteAllApplications}>Delete All</Button>
-          <div className=" md:col-span-3 col-span-6 hover:cursor-pointer py-2 px-10 bg-[#f5f5f5] font-bold">
-            <select name="Sort By" value={showFilteredPosition} onChange={handlePositionChange} className=" bg-[#f5f5f5]   w-[100%] outline-none" >
-              <option disabled >Sort By</option>
-              <option value={Position.FRONTEND_DEVELOPER} >{Position.FRONTEND_DEVELOPER}</option>
-              <option value={Position.BACKEND_DEVELOPER} >{Position.BACKEND_DEVELOPER}</option>
-              <option value={Position.QA} >{Position.QA}</option>
-              <option value={Position.INTERN} >{Position.INTERN}</option>
-            </select>
+          <div className=" md:col-span-3 col-span-6 hover:cursor-pointer  px-10 bg-[#f5f5f5] font-bold">
+            <SelectInput value={showFilteredPosition}
+              valueOptions={availablePositions}
+              labelOption="Sort By"
+              handleChange={handlePositionChange} name="position" />
           </div>
         </div>
 
-        <div className=" my-10 xl:px-10 ">
+        <div className=" my-10 max-w-[1200px]  box-border px-4 xl:px-0">
           {allForms.length ? allForms.map((ele) => (
             <TableContent key={ele._id} handleDelete={handleDelete} age={ele?.age} email={ele?.email} position={ele?.position} firstName={ele?.firstName} lastName={ele?.lastName} id={ele?._id} />
-          )) : <span className=" font-bold text-[20px] text-white">No Data Available</span>}
+          )) : <div className=" xl:w-[1200px] my-2 font-bold text-white px-3 py-1">No data</div> }
         </div>
       </div>
 
-      <div className=" flex gap-2 mb-10">
-        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString()) }}>Previous</button>
-        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" >{page}</button>
-        <button className="py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) + 1 <= totalPages && setPage((Number(page) + 1).toString()) }}>Next</button>
+      <div className=" grid grid-cols-12 gap-2 mb-10 p-2">
+        <button className=" sm:col-span-3 col-span-4  py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString()) }}>Previous</button>
+        <button className=" sm:col-span-3 col-span-4 py-2 px-5 bg-[#f5f5f5] font-bold" >{page} of {totalPages}</button>
+        <button className=" sm:col-span-3 col-span-4 py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) + 1 <= Number(totalPages) && setPage((Number(page) + 1).toString()) }}>Next</button>
+        <div className=" sm:col-span-3 col-span-12 flex justify-center">
+          <span className="py-2 px-5 font-bold">Page Size:</span>
+          <SelectInput value={pageSize} handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => { setPageSize(e.target.value) }} valueOptions={pageSizeOptions} />
+        </div>
       </div>
 
     </div>

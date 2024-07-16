@@ -6,8 +6,8 @@ import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
-import { JobApplication, Position } from "../interfaces/jobApplication"
-
+import { JobApplication } from "../interfaces/jobApplication"
+import { Position } from "../enums/positions";
 
 const ApplicationPage: FC = () => {
 
@@ -95,7 +95,7 @@ const ApplicationPage: FC = () => {
                 required: false,
                 value: formData?.startDate?.slice(0, 10),
             }
-    ]
+        ]
 
     const jobInputFields =
         [
@@ -105,7 +105,9 @@ const ApplicationPage: FC = () => {
                 title: 'Years Of Experience',
                 value: formData?.yearsOfExperience,
             }
-    ]
+        ]
+
+    const availablePositions = [Position.FRONTEND_DEVELOPER, Position.BACKEND_DEVELOPER, Position.INTERN, Position.QA];
 
     const handleFormEdit = async (): Promise<void> => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -115,7 +117,7 @@ const ApplicationPage: FC = () => {
         setId(urlParams.get('id'))
     }
 
-    const handleFormFeilds = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)  => {
+    const handleFormFeilds = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData((prev => ({ ...prev, [e.target.name]: e.target.value })))
     }
 
@@ -123,15 +125,15 @@ const ApplicationPage: FC = () => {
         e.preventDefault();
         if (!formData?.firstName || !formData?.lastName || formData?.age === 0 ||
             !formData?.email || formData?.score === 0 || !formData?.degree || formData?.yearsOfExperience === 0 || !formData?.position ||
-             !formData?.institution) { return toast("Enter requied feilds!"); }
+            !formData?.institution) { return toast("Enter requied feilds!"); }
 
         const emailExpression: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         const emailResult: boolean = emailExpression.test(String(formData?.email));
         if (!emailResult) { return toast("Incorrect E-mail!") }
 
-        // const phoneExpression: RegExp = /^[6-9]\d{9}$/;
-        // const phoneResult: boolean = phoneExpression.test(String(formData?.phone));
-        // if (!phoneResult) { return toast("Incorrect Phone!"); }
+        const phoneExpression: RegExp = /^[6-9]\d{9}$/;
+        const phoneResult: boolean = phoneExpression.test(String(formData?.phone));
+        if (!phoneResult) { return toast("Incorrect Phone!"); }
 
         const currentDate = new Date();
         const formDate = new Date(String(formData?.startDate));
@@ -157,7 +159,7 @@ const ApplicationPage: FC = () => {
                     <p className=" font-bold mb-5" >Personal Information</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {personalInputFields.map((ele) => (
-                                <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
+                            <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
                         ))}
                     </div>
                 </div>
@@ -166,7 +168,7 @@ const ApplicationPage: FC = () => {
                     <p className=" font-bold mb-5" >Contact Details</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {contactInputFields.map((ele) => (
-                                <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
+                            <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
                         ))}
                     </div>
                 </div>
@@ -175,7 +177,7 @@ const ApplicationPage: FC = () => {
                     <p className=" font-bold mb-5" >Educational History</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {educaionalInputFields.map((ele) => (
-                                <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
+                            <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
                         ))}
                     </div>
                 </div>
@@ -185,11 +187,15 @@ const ApplicationPage: FC = () => {
                     <div className="  grid grid-cols-12 gap-5 ">
                         <div className=" sm:col-span-6 col-span-12">
                             <div className=" flex flex-col ">
-                                <SelectInput value={formData?.position} title="What position are you looking for?" req={false} handleChange={handleFormFeilds} name="position" />
+                                <div className=" font-medium">What position are you looking for?<sup >*</sup></div>
+                                <SelectInput value={formData?.position}
+                                    valueOptions={availablePositions}
+                                    labelOption="Positions"
+                                    handleChange={handleFormFeilds} name="position" />
                             </div>
                         </div>
                         {jobInputFields.map((ele) => (
-                                <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
+                            <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
                         ))}
                     </div>
                 </div>

@@ -15,6 +15,7 @@ interface GenericInputProps {
 }
 
 const GenericInput: FC<GenericInputProps> = ({ inputProps, handleChange }) => {
+
   return (
     <div key={inputProps.name} className=" sm:col-span-6 col-span-12 ">
       <div className=" flex flex-col ">
