@@ -182,7 +182,7 @@ const ApplicationPage: FC = () => {
                     formData
                 );
             response.data.data && navigate("/");
-        } catch (err: any) {
+        } catch (err : any) {
             toast(err.response.data.message);
         }
     };
