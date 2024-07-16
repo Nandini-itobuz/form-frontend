@@ -1,212 +1,281 @@
-import { FC } from "react"
-import axios from "axios"
+import { FC } from "react";
+import axios from "axios";
 import GenericInput from "./FormInputs/GenericInput";
 import SelectInput from "./FormInputs/SelectInput";
-import { useEffect, useState } from "react"
-import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from "react-router-dom"
-import { ToastContainer, toast } from 'react-toastify';
-import { JobApplication } from "../interfaces/jobApplication"
+import { useEffect, useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
 
 const ApplicationPage: FC = () => {
-
     const navigate = useNavigate();
     const [id, setId] = useState<string | null>(null);
     const [formData, setFormData] = useState<JobApplication>({
-        firstName: '',
-        lastName: '',
+        firstName: "",
+        lastName: "",
         age: 0,
-        phone: '',
-        email: '',
+        phone: "",
+        email: "",
         yearsOfExperience: 0,
-        institution: '',
-        degree: '',
+        institution: "",
+        degree: "",
         score: 0,
         position: Position.INTERN,
         status: false,
-        startDate: ''
-    })
+        startDate: "",
+    });
 
     const personalInputFields = [
         {
-            name: 'firstName',
-            title: 'First Name',
+            name: "firstName",
+            title: "First Name",
             value: formData?.firstName,
         },
         {
-            name: 'middleName',
+            name: "middleName",
             required: false,
-            title: 'Middle Name',
+            title: "Middle Name",
             value: formData?.middleName,
         },
         {
-            name: 'lastName',
-            title: 'Last Name',
+            name: "lastName",
+            title: "Last Name",
             value: formData?.lastName,
         },
         {
-            name: 'age',
-            type: 'number',
-            title: 'Age',
+            name: "age",
+            type: "number",
+            title: "Age",
             value: formData?.age,
-        }
-    ]
+        },
+    ];
 
     const contactInputFields = [
         {
-            name: 'phone',
-            type: 'tel',
-            title: 'Phone Number',
+            name: "phone",
+            type: "tel",
+            title: "Phone Number",
             value: formData?.phone,
         },
         {
-            name: 'email',
-            title: 'Email Id',
+            name: "email",
+            title: "Email Id",
             value: formData?.email,
-        }
-    ]
+        },
+    ];
 
-    const educaionalInputFields =
-        [
-            {
-                name: 'institution',
-                title: 'Institution/University',
-                value: formData?.institution,
-            },
-            {
-                name: 'degree',
-                title: 'Degree',
-                value: formData?.degree,
-            }, {
-                name: 'fieldOfStudy',
-                title: 'Feild of Study',
-                required: false,
-                value: formData?.fieldOfStudy,
-            }, {
-                name: 'score',
-                type: 'number',
-                title: 'Score',
-                value: formData?.score,
-            }, {
-                name: 'startDate',
-                type: 'date',
-                title: 'Start Date',
-                required: false,
-                value: formData?.startDate?.slice(0, 10),
-            }
-        ]
+    const educaionalInputFields = [
+        {
+            name: "institution",
+            title: "Institution/University",
+            value: formData?.institution,
+        },
+        {
+            name: "degree",
+            title: "Degree",
+            value: formData?.degree,
+        },
+        {
+            name: "fieldOfStudy",
+            title: "Feild of Study",
+            required: false,
+            value: formData?.fieldOfStudy,
+        },
+        {
+            name: "score",
+            type: "number",
+            title: "Score",
+            value: formData?.score,
+        },
+        {
+            name: "startDate",
+            type: "date",
+            title: "Start Date",
+            required: false,
+            value: formData?.startDate?.slice(0, 10),
+        },
+    ];
 
-    const jobInputFields =
-        [
-            {
-                name: 'yearsOfExperience',
-                type: 'number',
-                title: 'Years Of Experience',
-                value: formData?.yearsOfExperience,
-            }
-        ]
+    const jobInputFields = [
+        {
+            name: "yearsOfExperience",
+            type: "number",
+            title: "Years Of Experience",
+            value: formData?.yearsOfExperience,
+        },
+    ];
 
-    const availablePositions = [Position.FRONTEND_DEVELOPER, Position.BACKEND_DEVELOPER, Position.INTERN, Position.QA];
+    const availablePositions = [
+        Position.FRONTEND_DEVELOPER,
+        Position.BACKEND_DEVELOPER,
+        Position.INTERN,
+        Position.QA,
+    ];
 
     const handleFormEdit = async (): Promise<void> => {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (!urlParams.get('id')) { return; }
-        const response = await axios.get(`http://localhost:4000/view-application/${urlParams.get('id')}`);
-        setFormData(response.data.data)
-        setId(urlParams.get('id'))
-    }
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (!urlParams.get("id")) {
+                return;
+            }
+            const response = await axios.get(
+                `http://localhost:4000/view-application/${urlParams.get("id")}`
+            );
+            setFormData(response.data.application);
+            setId(urlParams.get("id"));
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
-    const handleFormFeilds = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormData((prev => ({ ...prev, [e.target.name]: e.target.value })))
-    }
+    const handleFormFeilds = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
 
     const handleFormSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        if (!formData?.firstName || !formData?.lastName || formData?.age === 0 ||
-            !formData?.email || formData?.score === 0 || !formData?.degree || formData?.yearsOfExperience === 0 || !formData?.position ||
-            !formData?.institution) { return toast("Enter requied feilds!"); }
+        try {
+            e.preventDefault();
+            if (
+                !formData?.firstName ||
+                !formData?.lastName ||
+                formData?.age === 0 ||
+                !formData?.email ||
+                formData?.score === 0 ||
+                !formData?.degree ||
+                formData?.yearsOfExperience === 0 ||
+                !formData?.position ||
+                !formData?.institution
+            ) {
+                return toast("Enter requied feilds!");
+            }
 
-        const emailExpression: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-        const emailResult: boolean = emailExpression.test(String(formData?.email));
-        if (!emailResult) { return toast("Incorrect E-mail!") }
+            const emailExpression: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            const emailResult: boolean = emailExpression.test(
+                String(formData?.email)
+            );
+            if (!emailResult) {
+                return toast("Incorrect E-mail!");
+            }
 
-        const phoneExpression: RegExp = /^[6-9]\d{9}$/;
-        const phoneResult: boolean = phoneExpression.test(String(formData?.phone));
-        if (!phoneResult) { return toast("Incorrect Phone!"); }
+            const phoneExpression: RegExp = /^[6-9]\d{9}$/;
+            const phoneResult: boolean = phoneExpression.test(
+                String(formData?.phone)
+            );
+            if (!phoneResult) {
+                return toast("Incorrect Phone!");
+            }
 
-        const currentDate = new Date();
-        const formDate = new Date(String(formData?.startDate));
-        if (formDate > currentDate) { return toast('Invalid date') }
+            const currentDate = new Date();
+            const formDate = new Date(String(formData?.startDate));
+            if (formDate > currentDate) {
+                return toast("Invalid date");
+            }
 
-        const response = !id ? await axios.post('http://localhost:4000/create-application', formData) :
-            await axios.put(`http://localhost:4000/update-application/${id}`, formData);
-        response.data.data && navigate('/')
-    }
+            const response = !id
+                ? await axios.post("http://localhost:4000/create-application", formData)
+                : await axios.put(
+                    `http://localhost:4000/update-application/${id}`,
+                    formData
+                );
+            response.data.data && navigate("/");
+        } catch (err: any) {
+            toast(err.response.data.message);
+        }
+    };
 
     useEffect(() => {
         handleFormEdit();
-    }, [])
+    }, []);
 
     return (
         <>
             <ToastContainer />
             <div className=" bg-[#62abb4] p-5 ">
                 <h2 className=" flex justify-center sm:text-[35px] text-[20px] font-bold">
-                    Job Application Form</h2>
+                    Job Application Form
+                </h2>
 
                 <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
-                    <p className=" font-bold mb-5" >Personal Information</p>
+                    <p className=" font-bold mb-5">Personal Information</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {personalInputFields.map((ele) => (
-                            <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
+                            <GenericInput
+                                key={ele?.name}
+                                inputProps={ele}
+                                handleChange={handleFormFeilds}
+                            />
                         ))}
                     </div>
                 </div>
 
                 <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
-                    <p className=" font-bold mb-5" >Contact Details</p>
+                    <p className=" font-bold mb-5">Contact Details</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {contactInputFields.map((ele) => (
-                            <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
+                            <GenericInput
+                                key={ele?.name}
+                                inputProps={ele}
+                                handleChange={handleFormFeilds}
+                            />
                         ))}
                     </div>
                 </div>
 
                 <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
-                    <p className=" font-bold mb-5" >Educational History</p>
+                    <p className=" font-bold mb-5">Educational History</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {educaionalInputFields.map((ele) => (
-                            <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
+                            <GenericInput
+                                key={ele?.name}
+                                inputProps={ele}
+                                handleChange={handleFormFeilds}
+                            />
                         ))}
                     </div>
                 </div>
 
                 <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
-                    <p className=" font-bold mb-5" >Job Details</p>
+                    <p className=" font-bold mb-5">Job Details</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         <div className=" sm:col-span-6 col-span-12">
                             <div className=" flex flex-col ">
-                                <div className=" font-medium">What position are you looking for?<sup >*</sup></div>
-                                <SelectInput value={formData?.position}
+                                <div className=" font-medium">
+                                    What position are you looking for?<sup>*</sup>
+                                </div>
+                                <SelectInput
+                                    value={formData?.position}
                                     valueOptions={availablePositions}
                                     labelOption="Positions"
-                                    handleChange={handleFormFeilds} name="position" />
+                                    handleChange={handleFormFeilds}
+                                    name="position"
+                                />
                             </div>
                         </div>
                         {jobInputFields.map((ele) => (
-                            <GenericInput key={ele?.name} inputProps={ele} handleChange={handleFormFeilds} />
+                            <GenericInput
+                                key={ele?.name}
+                                inputProps={ele}
+                                handleChange={handleFormFeilds}
+                            />
                         ))}
                     </div>
                 </div>
 
                 <div className=" flex justify-center mb-5">
-                    <button className=" py-2 px-10 bg-[#f5f5f5] font-bold" onClick={handleFormSubmit}>Submit</button>
+                    <button
+                        className=" py-2 px-10 bg-[#f5f5f5] font-bold"
+                        onClick={handleFormSubmit}
+                    >
+                        Submit
+                    </button>
                 </div>
-
             </div>
         </>
-    )
-}
+    );
+};
 
-export default ApplicationPage
+export default ApplicationPage;

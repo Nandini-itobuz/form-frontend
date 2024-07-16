@@ -18,12 +18,13 @@ const Home = () => {
   const [showFilteredPosition, setShowFiltereddPosition] = useState<string>('Sort By')
 
   const availablePositions = [Position.FRONTEND_DEVELOPER, Position.BACKEND_DEVELOPER, Position.INTERN, Position.QA];
-  const pageSizeOptions: string[] = [PageSize.THREE, PageSize.FIVE, PageSize.TEN,
+  const pageSizeOptions: string[] = [ PageSize.TEN,
   PageSize.TWLEVE, PageSize.FIFTEEN, PageSize.TWENTY];
   const [pageSize, setPageSize] = useState<string>(pageSizeOptions[0]);
 
   
   const getAllUser = async (): Promise<void> => {
+
     const response = await axios.get(`http://localhost:4000/view-applications/${page}/${pageSize}`);
     setTotalPages(response.data.data.totalPages)
     setAllForms(response.data.data.applicationData);
@@ -96,7 +97,7 @@ const Home = () => {
           <Button handleClick={() => { navigate('/create-edit-form') }}>Add </Button>
           <Button handleClick={getAllUser}>View All</Button>
           <Button handleClick={deleteAllApplications}>Delete All</Button>
-          <div className=" md:col-span-3 col-span-6 hover:cursor-pointer  px-10 bg-[#f5f5f5] font-bold">
+          <div className=" md:col-span-3 col-span-6 hover:cursor-pointer  bg-[#f5f5f5] font-bold">
             <SelectInput value={showFilteredPosition}
               valueOptions={availablePositions}
               labelOption="Sort By"
@@ -104,7 +105,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className=" my-10 max-w-[1200px]  box-border px-4 xl:px-0">
+        <div className=" sm:max-h-[70vh] max-h-[60vh] overflow-x-scroll no-scrollbar my-10 max-w-[1200px]  box-border px-4 xl:px-0">
           {allForms.length ? allForms.map((ele) => (
             <TableContent key={ele._id} handleDelete={handleDelete} age={ele?.age} email={ele?.email} position={ele?.position} firstName={ele?.firstName} lastName={ele?.lastName} id={ele?._id} />
           )) : <div className=" xl:w-[1200px] my-2 font-bold text-white px-3 py-1">No data</div> }
@@ -117,7 +118,11 @@ const Home = () => {
         <button className=" sm:col-span-3 col-span-4 py-2 px-5 bg-[#f5f5f5] font-bold" onClick={() => { Number(page) + 1 <= Number(totalPages) && setPage((Number(page) + 1).toString()) }}>Next</button>
         <div className=" sm:col-span-3 col-span-12 flex justify-center">
           <span className="py-2 px-5 font-bold">Page Size:</span>
-          <SelectInput value={pageSize} handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => { setPageSize(e.target.value) }} valueOptions={pageSizeOptions} />
+          <SelectInput value={pageSize} handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => 
+          { 
+            setPage('1')
+            setPageSize(e.target.value)
+          }} valueOptions={pageSizeOptions} />
         </div>
       </div>
 
