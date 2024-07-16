@@ -96,7 +96,7 @@ const Home = () => {
       <div>
         <div className=" grid grid-cols-12 md:gap-10 gap-2 px-2 justify-center items-center">
           <Button handleClick={() => { navigate('/create-edit-form') }}>Add </Button>
-          <Button handleClick={getAllUser}>View All</Button>
+          <Button handleClick={() => {setShowFiltereddPosition('Sort By')}}>View All</Button>
           <Button handleClick={deleteAllApplications}>Delete All</Button>
           <div className=" md:col-span-3 px-4 col-span-6 hover:cursor-pointer  bg-[#f5f5f5] font-bold">
             <SelectInput value={showFilteredPosition}
