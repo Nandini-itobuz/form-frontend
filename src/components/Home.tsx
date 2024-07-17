@@ -115,7 +115,7 @@ const Home = () => {
     <div className=" min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto] bg-[#62abb4] ">
       <div>
         <div className=" grid grid-cols-12 md:gap-10 gap-2 px-2 justify-center items-center">
-          <Button handleClick={() => {navigate("/create-edit-form");}}>All</Button>
+          <Button handleClick={() => {navigate("/create-edit-form");}}>Add</Button>
           <Button
             handleClick={() => {
               setShowFiltereddPosition("Sort By");
