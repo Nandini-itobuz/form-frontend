@@ -1,15 +1,22 @@
 import { FC } from "react";
-import axios from "axios";
-import GenericInput from "./FormInputs/GenericInput";
-import SelectInput from "./FormInputs/SelectInput";
+import GenericInput from "../components/FormInputs/GenericInput";
+import SelectInput from "../components/FormInputs/SelectInput";
 import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
+import { validateInputValues } from "../validator/formInputsValues";
+import { ValidationResponse } from "../interfaces/validationResponse";
+import { ApplicationClient } from "../config/axiosInstance";
 
 const ApplicationPage: FC = () => {
+  const notifyFunction = (message: string) => {
+    toast(message);
+    return;
+  };
+
   const navigate = useNavigate();
   const [id, setId] = useState<string | null>(null);
   const [formData, setFormData] = useState<JobApplication>({
@@ -120,8 +127,8 @@ const ApplicationPage: FC = () => {
       if (!urlParams.get("id")) {
         return;
       }
-      const response = await axios.get(
-        `http://localhost:4000/view-application/${urlParams.get("id")}`,
+      const response = await ApplicationClient.get(
+        `/view-application/${urlParams.get("id")}`,
       );
       setFormData(response.data.application);
       setId(urlParams.get("id"));
@@ -139,48 +146,15 @@ const ApplicationPage: FC = () => {
   const handleFormSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
-      if (
-        !formData?.firstName ||
-        !formData?.lastName ||
-        formData?.age === 0 ||
-        !formData?.email ||
-        formData?.score === 0 ||
-        !formData?.degree ||
-        formData?.yearsOfExperience === 0 ||
-        !formData?.position ||
-        !formData?.institution
-      ) {
-        return toast("Enter requied feilds!");
-      }
+      const validate: ValidationResponse = validateInputValues(formData);
+      !validate.success && notifyFunction(validate.message);
 
-      const emailExpression: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-      const emailResult: boolean = emailExpression.test(
-        String(formData?.email),
-      );
-      if (!emailResult) {
-        return toast("Incorrect E-mail!");
+      if (!validateInputValues(formData)) {
+        return;
       }
-
-      const phoneExpression: RegExp = /^[6-9]\d{9}$/;
-      const phoneResult: boolean = phoneExpression.test(
-        String(formData?.phone),
-      );
-      if (!phoneResult) {
-        return toast("Incorrect Phone!");
-      }
-
-      const currentDate = new Date();
-      const formDate = new Date(String(formData?.startDate));
-      if (formDate > currentDate) {
-        return toast("Invalid date");
-      }
-
       const response = !id
-        ? await axios.post("http://localhost:4000/create-application", formData)
-        : await axios.put(
-            `http://localhost:4000/update-application/${id}`,
-            formData,
-          );
+        ? await ApplicationClient.post("/create-application", formData)
+        : await ApplicationClient.put(`/update-application/${id}`, formData);
       response.data.data && navigate("/");
     } catch (err: any) {
       toast(err.response.data.message);

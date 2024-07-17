@@ -1,16 +1,11 @@
-import Home from "./components/Home";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import { BrowserRouter } from "react-router-dom";
 import { FC } from "react";
-import ApplicationPage from "./components/ApplicationPage";
+import Router from "./Router";
 
 const App: FC = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/create-edit-form" element={<ApplicationPage />} />
-      </Routes>
+      <Router />
     </BrowserRouter>
   );
 };

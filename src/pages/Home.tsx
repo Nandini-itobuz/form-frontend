@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Button from "./Button";
+import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
-import TableContent from "./TableContent";
+import TableContent from "../components/TableContent";
 import Swal from "sweetalert2";
-import SelectInput from "./FormInputs/SelectInput";
+import SelectInput from "../components/FormInputs/SelectInput";
 import { PageSize } from "../enums/pageSize";
+import { ApplicationClient } from "../config/axiosInstance";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ const Home = () => {
     Position.INTERN,
     Position.QA,
   ];
+
   const pageSizeOptions: string[] = [
     PageSize.FIVE,
     PageSize.TEN,
@@ -36,11 +37,11 @@ const Home = () => {
     try {
       const response =
         showFilteredPosition === "Sort By"
-          ? await axios.get(
-              `http://localhost:4000/view-applications/${page}/${pageSize}`,
+          ? await ApplicationClient.get(
+              `/view-applications/${page}/${pageSize}`,
             )
-          : await axios.get(
-              `http://localhost:4000/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
+          : await ApplicationClient.get(
+              `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
             );
       setTotalPages(response.data.data.totalPages);
       setAllForms(response.data.data.applicationData);
@@ -51,7 +52,7 @@ const Home = () => {
 
   const handleDeleteAppliaction = async (id: string): Promise<void> => {
     try {
-      await axios.delete(`http://localhost:4000/delete-application/${id}`);
+      await ApplicationClient.delete(`/delete-application/${id}`);
       getAllUser();
     } catch (err) {
       console.log(err);
@@ -80,7 +81,7 @@ const Home = () => {
 
   const deleteApplications = async (): Promise<void> => {
     try {
-      await axios.delete("http://localhost:4000/delete-all-applications");
+      await ApplicationClient.delete("/delete-all-applications");
       getAllUser();
     } catch (err) {
       console.log(err);
@@ -115,7 +116,13 @@ const Home = () => {
     <div className=" min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto] bg-[#62abb4] ">
       <div>
         <div className=" grid grid-cols-12 md:gap-10 gap-2 px-2 justify-center items-center">
-          <Button handleClick={() => {navigate("/create-edit-form");}}>Add</Button>
+          <Button
+            handleClick={() => {
+              navigate("/create-edit-form");
+            }}
+          >
+            Add
+          </Button>
           <Button
             handleClick={() => {
               setShowFiltereddPosition("Sort By");
