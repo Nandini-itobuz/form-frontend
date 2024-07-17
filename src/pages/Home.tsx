@@ -14,7 +14,7 @@ const Home = () => {
   const [page, setPage] = useState<string>("1");
   const [totalPages, setTotalPages] = useState<string>("1");
   const [allForms, setAllForms] = useState<JobApplication[]>([]);
-  const [showFilteredPosition, setShowFiltereddPosition] =
+  const [showFilteredPosition, setShowFilteredPosition] =
     useState<string>("Sort By");
 
   const availablePositions = [
@@ -27,7 +27,6 @@ const Home = () => {
   const pageSizeOptions: string[] = [
     PageSize.FIVE,
     PageSize.TEN,
-    PageSize.TWLEVE,
     PageSize.FIFTEEN,
     PageSize.TWENTY,
   ];
@@ -125,7 +124,7 @@ const Home = () => {
           </Button>
           <Button
             handleClick={() => {
-              setShowFiltereddPosition("Sort By");
+              setShowFilteredPosition("Sort By");
             }}
           >
             View All
@@ -137,7 +136,8 @@ const Home = () => {
               valueOptions={availablePositions}
               labelOption="Sort By"
               handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setShowFiltereddPosition(e.target.value);
+                setPage('1')
+                setShowFilteredPosition(e.target.value);
               }}
               name="position"
             />
