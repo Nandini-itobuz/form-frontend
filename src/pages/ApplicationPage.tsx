@@ -1,21 +1,25 @@
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react"
 import GenericInput from "../components/FormInputs/GenericInput";
 import SelectInput from "../components/FormInputs/SelectInput";
 import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
 import { validateInputValues } from "../validator/formInputsValues";
 import { ValidationResponse } from "../interfaces/validationResponse";
 import { ApplicationClient } from "../config/axiosInstance";
+import { useForm } from "react-hook-form";
 
+interface ApplicationPageInterface {
+    setShowModal: Dispatch<SetStateAction<boolean>>;
+    getAllUser: () => void;
+    editableId?: string | null | undefined
+}
 
-const ApplicationPage: FC = () => {
+const ApplicationPage: FC<ApplicationPageInterface> = ({ setShowModal, getAllUser, editableId }) => {
 
-    const navigate = useNavigate();
-    const [id, setId] = useState<string | null>('');
+    const method = useForm<JobApplication>();
     const [formData, setFormData] = useState<JobApplication>({
         firstName: "",
         lastName: "",
@@ -124,15 +128,13 @@ const ApplicationPage: FC = () => {
 
     const handleFormEdit = async (): Promise<void> => {
         try {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (!urlParams.get("id")) {
+            if (!editableId) {
                 return;
             }
             const response = await ApplicationClient.get(
-                `/view-application/${urlParams.get("id")}`
+                `/view-application/${editableId}`
             );
             setFormData(response.data.application);
-            setId(urlParams.get("id"));
         } catch (err) {
             console.log(err);
         }
@@ -142,19 +144,20 @@ const ApplicationPage: FC = () => {
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handleFormSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+
+
+    const handleFormSubmit = async ( data: JobApplication) => {
         try {
-            e.preventDefault();
-            console.log(id)
+            console.log(data)
             const validate: ValidationResponse = validateInputValues(formData);
             !validate.success && notifyFunction(validate.message);
 
-            console.log(id)
             if (!validateInputValues(formData)) { return; }
             const response = await ApplicationClient.post(
-                    `/create-application/${id}`,formData
-                );
-            response.data.data && navigate("/");
+                `/create-application/${editableId}`, formData
+            );
+            response.data.data && setShowModal(false);
+            getAllUser();
         } catch (err: any) {
             toast(err.response.data.message);
         }
@@ -167,12 +170,9 @@ const ApplicationPage: FC = () => {
     return (
         <>
             <ToastContainer />
-            <div className=" bg-[#62abb4] p-5 ">
-                <h2 className=" flex justify-center sm:text-[35px] text-[20px] font-bold">
-                    Job Application Form
-                </h2>
+            <form className="w-[100%] rounded-lg" onSubmit={method.handleSubmit(handleFormSubmit)}>
 
-                <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
+                <div className="bg-[#62abb4]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
                     <p className=" font-bold mb-5">Personal Information</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {personalInputFields.map((ele) => (
@@ -180,13 +180,14 @@ const ApplicationPage: FC = () => {
                                 key={ele?.name}
                                 inputProps={ele}
                                 handleChange={handleFormFeilds}
+                                register={ method.register }
                             />
                         ))}
                     </div>
                 </div>
 
-                <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
-                    <p className=" font-bold mb-5">Contact Details</p>
+                <div className="bg-[#62abb4]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+                    <p className=" font-bold mb-5 text-whi">Contact Details</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {contactInputFields.map((ele) => (
                             <GenericInput
@@ -198,7 +199,7 @@ const ApplicationPage: FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
+                <div className="bg-[#62abb4]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
                     <p className=" font-bold mb-5">Educational History</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         {educaionalInputFields.map((ele) => (
@@ -211,7 +212,7 @@ const ApplicationPage: FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white  max-w-[1200px] mx-auto sm:p-10 p-5 my-5">
+                <div className="bg-[#62abb4]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
                     <p className=" font-bold mb-5">Job Details</p>
                     <div className="  grid grid-cols-12 gap-5 ">
                         <div className=" sm:col-span-6 col-span-12">
@@ -239,14 +240,10 @@ const ApplicationPage: FC = () => {
                 </div>
 
                 <div className=" flex justify-center mb-5">
-                    <button
-                        className=" py-2 px-10 bg-[#f5f5f5] font-bold"
-                        onClick={handleFormSubmit}
-                    >
-                        Submit
-                    </button>
+                    <input type="submit"   className=" py-2 px-10 bg-[#62abb4] text-white rounded-sm font-bold"/>
                 </div>
-            </div>
+
+            </form>
         </>
     );
 };

@@ -1,7 +1,6 @@
 import { MdEdit } from "react-icons/md";
 import { MdDeleteSweep } from "react-icons/md";
-import { FC } from "react";
-import { useNavigate } from "react-router-dom";
+import { Dispatch, FC, SetStateAction } from "react"
 
 interface TableContent {
   firstName: string;
@@ -11,6 +10,8 @@ interface TableContent {
   email: string;
   position: string;
   handleDelete: (id: any) => Promise<void>;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+  setEditableId : Dispatch<SetStateAction<string | null | undefined>>
 }
 
 const TableContent: FC<TableContent> = ({
@@ -21,10 +22,13 @@ const TableContent: FC<TableContent> = ({
   age,
   email,
   position,
+  setShowModal,
+  setEditableId
 }) => {
-  const navigate = useNavigate();
   const handleEdit = () => {
-    navigate(`/create-edit-form?id=${id}`);
+    setShowModal(true)
+    setEditableId(id)
+    console.log(id)
   };
 
   return (
@@ -40,9 +44,7 @@ const TableContent: FC<TableContent> = ({
       <div className=" lg:col-span-4 col-span-12  my-3 flex justify-end gap-4">
         <div
           className=" hover:cursor-pointer"
-          onClick={() => {
-            handleEdit();
-          }}
+          onClick={handleEdit }
         >
           <MdEdit />
         </div>

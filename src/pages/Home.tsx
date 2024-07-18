@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
-import { useNavigate } from "react-router-dom";
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
 import TableContent from "../components/TableContent";
@@ -8,14 +7,16 @@ import Swal from "sweetalert2";
 import SelectInput from "../components/FormInputs/SelectInput";
 import { PageSize } from "../enums/pageSize";
 import { ApplicationClient } from "../config/axiosInstance";
+import FormModal from "../components/FormModal";
 
 const Home = () => {
-  const navigate = useNavigate();
   const [page, setPage] = useState<string>("1");
   const [totalPages, setTotalPages] = useState<string>("1");
   const [allForms, setAllForms] = useState<JobApplication[]>([]);
+  const [showModal, setShowodal] = useState<boolean>(false);
   const [showFilteredPosition, setShowFilteredPosition] =
     useState<string>("Sort By");
+  const [editableId, setEditableId] = useState<string | null | undefined>(null)
 
   const availablePositions = [
     Position.FRONTEND_DEVELOPER,
@@ -37,11 +38,11 @@ const Home = () => {
       const response =
         showFilteredPosition === "Sort By"
           ? await ApplicationClient.get(
-              `/view-applications/${page}/${pageSize}`,
-            )
+            `/view-applications/${page}/${pageSize}`,
+          )
           : await ApplicationClient.get(
-              `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
-            );
+            `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
+          );
       setTotalPages(response.data.data.totalPages);
       setAllForms(response.data.data.applicationData);
     } catch (err) {
@@ -112,12 +113,12 @@ const Home = () => {
   }, [page, pageSize, showFilteredPosition]);
 
   return (
-    <div className=" min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto] bg-[#62abb4] ">
+    <div className=" z-0 min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto] bg-[#62abb4] ">
       <div>
         <div className=" grid grid-cols-12 md:gap-10 gap-2 px-2 justify-center items-center">
           <Button
             handleClick={() => {
-              navigate("/create-edit-form");
+              setShowodal(true)
             }}
           >
             Add
@@ -148,6 +149,7 @@ const Home = () => {
           {allForms.length ? (
             allForms.map((ele) => (
               <TableContent
+                setShowModal={setShowodal}
                 key={ele._id}
                 handleDelete={handleDelete}
                 age={ele?.age}
@@ -156,6 +158,7 @@ const Home = () => {
                 firstName={ele?.firstName}
                 lastName={ele?.lastName}
                 id={ele?._id}
+                setEditableId={setEditableId}
               />
             ))
           ) : (
@@ -199,6 +202,13 @@ const Home = () => {
           />
         </div>
       </div>
+
+      {showModal && <FormModal
+        editableId={editableId}
+        setShowModal={setShowodal}
+        getAllUser={getAllUser} 
+      setEditableId ={setEditableId} />
+      }
     </div>
   );
 };

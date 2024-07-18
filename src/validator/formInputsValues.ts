@@ -1,7 +1,7 @@
 import { JobApplication } from "../interfaces/jobApplication";
 import { ValidationResponse } from "../interfaces/validationResponse";
 
-export const validateInputValues = (formData: JobApplication) : ValidationResponse => {
+export const validateInputValues = (formData: JobApplication | undefined) : ValidationResponse => {
   if (
     !formData?.firstName ||
     !formData?.lastName ||
