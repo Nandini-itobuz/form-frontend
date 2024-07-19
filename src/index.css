@@ -2,20 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-  font-family: 'Roboto';
+* {
+  font-family: "Roboto";
 }
 
 .confirm-button-class {
-  background-color: #62ABB4;
+  background-color: #62abb4;
   padding: 10px 20px;
-  color : white;
+  color: white;
   outline: none;
-  font-weight : bold;
-  border: 0
+  font-weight: bold;
+  border: 0;
 }
 
-.title-class{
+.title-class {
   font-weight: 500;
   color: black;
 }
@@ -23,11 +23,11 @@
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    display: none;
   }
- /* Hide scrollbar for IE, Edge and Firefox */
+  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
-}
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }

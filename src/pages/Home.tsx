@@ -12,11 +12,11 @@ import FormModal from "../components/FormModal";
 const Home = () => {
   const [page, setPage] = useState<string>("1");
   const [totalPages, setTotalPages] = useState<string>("1");
-  const [allForms, setAllForms] = useState<JobApplication[]>([]);
+  const [allForms, setAllForms] = useState<JobApplication[] | null>([]);
   const [showModal, setShowodal] = useState<boolean>(false);
+  const [formData, setFormData] = useState<JobApplication | null>(null);
   const [showFilteredPosition, setShowFilteredPosition] =
     useState<string>("Sort By");
-  const [editableId, setEditableId] = useState<string | null | undefined>(null)
 
   const availablePositions = [
     Position.FRONTEND_DEVELOPER,
@@ -38,11 +38,11 @@ const Home = () => {
       const response =
         showFilteredPosition === "Sort By"
           ? await ApplicationClient.get(
-            `/view-applications/${page}/${pageSize}`,
-          )
+              `/view-applications/${page}/${pageSize}`,
+            )
           : await ApplicationClient.get(
-            `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
-          );
+              `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
+            );
       setTotalPages(response.data.data.totalPages);
       setAllForms(response.data.data.applicationData);
     } catch (err) {
@@ -50,38 +50,12 @@ const Home = () => {
     }
   };
 
-  const handleDeleteAppliaction = async (id: string): Promise<void> => {
-    try {
-      await ApplicationClient.delete(`/delete-application/${id}`);
-      getAllUser();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleDelete = async (id: string): Promise<void> => {
-    Swal.fire({
-      title: "Delete item?",
-      showDenyButton: true,
-      confirmButtonText: "Delete",
-      denyButtonText: `Cancel`,
-      customClass: {
-        confirmButton: "confirm-button-class",
-        denyButton: "confirm-button-class",
-        title: "title-class",
-        icon: "icon-class",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        handleDeleteAppliaction(id);
-        Swal.fire("Deleted successfully!", "", "success");
-      }
-    });
-  };
-
   const deleteApplications = async (): Promise<void> => {
     try {
-      await ApplicationClient.delete("/delete-all-applications");
+      const response = await ApplicationClient.post(`/delete-application`, {
+        id: null,
+      });
+      response.data.success && setAllForms(null);
       getAllUser();
     } catch (err) {
       console.log(err);
@@ -118,7 +92,7 @@ const Home = () => {
         <div className=" grid grid-cols-12 md:gap-10 gap-2 px-2 justify-center items-center">
           <Button
             handleClick={() => {
-              setShowodal(true)
+              setShowodal(true);
             }}
           >
             Add
@@ -137,7 +111,7 @@ const Home = () => {
               valueOptions={availablePositions}
               labelOption="Sort By"
               handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setPage('1')
+                setPage("1");
                 setShowFilteredPosition(e.target.value);
               }}
               name="position"
@@ -146,20 +120,9 @@ const Home = () => {
         </div>
 
         <div className=" sm:max-h-[70vh] max-h-[60vh] overflow-x-scroll no-scrollbar my-10 max-w-[1200px]  box-border px-4 xl:px-0">
-          {allForms.length ? (
+          {allForms && allForms.length ? (
             allForms.map((ele) => (
-              <TableContent
-                setShowModal={setShowodal}
-                key={ele._id}
-                handleDelete={handleDelete}
-                age={ele?.age}
-                email={ele?.email}
-                position={ele?.position}
-                firstName={ele?.firstName}
-                lastName={ele?.lastName}
-                id={ele?._id}
-                setEditableId={setEditableId}
-              />
+              <TableContent key={ele._id} inputProps={ele} />
             ))
           ) : (
             <div className=" xl:w-[1200px] my-2 font-bold text-white px-3 py-1">
@@ -203,12 +166,13 @@ const Home = () => {
         </div>
       </div>
 
-      {showModal && <FormModal
-        editableId={editableId}
-        setShowModal={setShowodal}
-        getAllUser={getAllUser} 
-      setEditableId ={setEditableId} />
-      }
+      {showModal && (
+        <FormModal
+          setShowModal={setShowodal}
+          editableId={undefined}
+          setFormData={setFormData}
+        />
+      )}
     </div>
   );
 };

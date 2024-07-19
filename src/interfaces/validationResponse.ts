@@ -1,4 +1,4 @@
 export interface ValidationResponse {
   success: boolean;
-	message: string
+  message: string;
 }

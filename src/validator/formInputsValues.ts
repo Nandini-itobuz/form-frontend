@@ -1,7 +1,9 @@
 import { JobApplication } from "../interfaces/jobApplication";
 import { ValidationResponse } from "../interfaces/validationResponse";
 
-export const validateInputValues = (formData: JobApplication | undefined) : ValidationResponse => {
+export const validateInputValues = (
+  formData: JobApplication | undefined,
+): ValidationResponse => {
   if (
     !formData?.firstName ||
     !formData?.lastName ||
@@ -13,7 +15,7 @@ export const validateInputValues = (formData: JobApplication | undefined) : Vali
     !formData?.position ||
     !formData?.institution
   ) {
-		return { success: false, message: "Enter requied feilds!" };
+    return { success: false, message: "Enter requied feilds!" };
   }
 
   const emailExpression: RegExp = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
