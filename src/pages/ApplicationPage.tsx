@@ -5,8 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
-import { validateInputValues } from "../validator/formInputsValues";
-import { ValidationResponse } from "../interfaces/validationResponse";
 import { ApplicationClient } from "../config/axiosInstance";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -119,13 +117,11 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
 
   const handleFormSubmit = async (data: JobApplication) => {
     try {
-      console.log(data);
       const response = await ApplicationClient.post(
         `/create-application/${editableId}`,
         data,
       );
       response.data.data && setShowModal(false);
-      console.log(response)
       setFormData(response.data.data);
     } catch (err: any) {
       toast(err.response.data.message);
