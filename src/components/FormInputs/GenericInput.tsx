@@ -12,16 +12,15 @@ const GenericInput: FC<GenericInputProps> = ({ inputProps }) => {
     register,
     formState: { errors },
   } = useFormContext();
-  const [errorMsg, setErrorMsg] = useState<string | undefined>("");
+  // const [errorMsg, setErrorMsg] = useState<string | undefined>("");
 
-  useEffect(() => {
-    const errorObj = Object.entries(errors);
-    const errMsg = errorObj.find((ele) => ele[0] === inputProps?.name);
-    if (errMsg) {
-      setErrorMsg(errMsg[1]?.message?.toString());
-    }
-  }),
-    [];
+  // useEffect(() => {
+  //   const errorObj = Object.entries(errors);
+  //   const errMsg = errorObj.find((ele) => ele[0] === inputProps?.name);
+  //   if (errMsg) {
+  //     setErrorMsg(errMsg[1]?.message?.toString());
+  //   }
+  // }, []);
 
   return (
     <div key={inputProps.name} className=" sm:col-span-6 col-span-12  ">
@@ -36,7 +35,7 @@ const GenericInput: FC<GenericInputProps> = ({ inputProps }) => {
           className=" p-2 gap-1  w-[100%] bg-[#fff] border-0 outline-none"
         />
         <p className=" text-white text-[14px] font-medium flex justify-end">
-          {errorMsg}
+          {/* {errors[inputProps?.name!]?.message as string} */}
         </p>
       </div>
     </div>
