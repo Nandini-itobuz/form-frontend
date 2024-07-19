@@ -28,11 +28,6 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
     resolver: zodResolver(applicationZodSchema),
   });
 
-  const notifyFunction = (message: string) => {
-    toast(message);
-    return;
-  };
-
   const personalInputFields = [
     {
       name: "firstName",
@@ -124,17 +119,13 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
 
   const handleFormSubmit = async (data: JobApplication) => {
     try {
-      const validate: ValidationResponse = validateInputValues(data);
-      if (!validate.success) {
-        notifyFunction(validate.message);
-        return;
-      }
       console.log(data);
       const response = await ApplicationClient.post(
         `/create-application/${editableId}`,
         data,
       );
       response.data.data && setShowModal(false);
+      console.log(response)
       setFormData(response.data.data);
     } catch (err: any) {
       toast(err.response.data.message);
@@ -204,7 +195,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           <div className=" flex justify-center mb-5">
             <input
               type="submit"
-              className=" py-2 px-10 bg-[#62abb4] text-white rounded-sm font-bold"
+              className=" py-2 px-10 bg-[#62abb4] text-white rounded-sm font-bold hover:cursor-pointer"
             />
           </div>
         </form>

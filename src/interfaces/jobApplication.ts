@@ -13,5 +13,5 @@ export interface JobApplication {
   startDate?: string;
   score: number;
   yearsOfExperience: number;
-  status: boolean;
+  status?: boolean;
 }

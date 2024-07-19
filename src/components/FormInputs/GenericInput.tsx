@@ -15,6 +15,7 @@ const GenericInput: FC<GenericInputProps> = ({ inputProps }) => {
   const [errorMsg, setErrorMsg] = useState<string | undefined>("");
 
   useEffect(() => {
+    console.log(errors)
     const errorObj = Object.entries(errors);
     const errMsg = errorObj.find((ele) => ele[0] === inputProps?.name);
     if (errMsg) {
