@@ -2,9 +2,9 @@ import { MdEdit } from "react-icons/md";
 import { MdDeleteSweep } from "react-icons/md";
 import { FC, useState } from "react";
 import FormModal from "./FormModal";
-import Swal from "sweetalert2";
 import { ApplicationClient } from "../config/axiosInstance";
 import { JobApplication } from "../interfaces/jobApplication";
+import { handleSwalFire } from "../helper/swal";
 
 interface TableContent {
   inputProps: JobApplication;
@@ -19,28 +19,15 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
     setShowodal(true);
   };
 
-  const handleDelete = async () => {
-    Swal.fire({
-      title: "Delete item?",
-      showDenyButton: true,
-      confirmButtonText: "Delete",
-      denyButtonText: `Cancel`,
-      customClass: {
-        confirmButton: "confirm-button-class",
-        denyButton: "confirm-button-class",
-        title: "title-class",
-        icon: "icon-class",
-      },
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const response = await ApplicationClient.post(`/delete-application`, {
-          id: inputProps?._id,
-        });
-        response.data.success && setShowTableContent(false);
-        Swal.fire("Deleted successfully!", "", "success");
-      }
+  const handleDeleteData = async() => {
+    const response = await ApplicationClient.post(`/delete-application`, {
+      id: inputProps?._id,
     });
-  };
+    response.data.success && setShowTableContent(false);
+  }
+
+  const handleDelete = async () => handleSwalFire('Delete Item?', "Delete", "cancel", handleDeleteData, "Deleted successfully!" )
+
 
   return (
     <>

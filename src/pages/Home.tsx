@@ -3,11 +3,11 @@ import Button from "../components/Button";
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
 import TableContent from "../components/TableContent";
-import Swal from "sweetalert2";
 import SelectInput from "../components/FormInputs/SelectInput";
 import { PageSize } from "../enums/pageSize";
 import { ApplicationClient } from "../config/axiosInstance";
 import FormModal from "../components/FormModal";
+import { handleSwalFire } from "../helper/swal";
 
 const Home = () => {
   const [page, setPage] = useState<string>("1");
@@ -38,11 +38,11 @@ const Home = () => {
       const response =
         showFilteredPosition === "Sort By"
           ? await ApplicationClient.get(
-              `/view-applications/${page}/${pageSize}`,
-            )
+            `/view-applications/${page}/${pageSize}`,
+          )
           : await ApplicationClient.get(
-              `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
-            );
+            `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
+          );
       setTotalPages(response.data.data.totalPages);
       setAllForms(response.data.data.applicationData);
     } catch (err) {
@@ -62,25 +62,7 @@ const Home = () => {
     }
   };
 
-  const deleteAllApplications = async (): Promise<void> => {
-    Swal.fire({
-      title: "Delete All Items?",
-      showDenyButton: true,
-      confirmButtonText: "Delete",
-      denyButtonText: `Cancel`,
-      customClass: {
-        confirmButton: "confirm-button-class",
-        denyButton: "confirm-button-class",
-        title: "title-class",
-        icon: "icon-class",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteApplications();
-        Swal.fire("Deleted successfully!", "", "success");
-      }
-    });
-  };
+  const deleteAllApplications = async (): Promise<void> => handleSwalFire('Delete All Items?', 'Delete', 'Cancel', deleteApplications, 'Deleted Successfully!')
 
   useEffect(() => {
     getAllUser();

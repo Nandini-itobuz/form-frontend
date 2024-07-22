@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+import { FC } from "react";
 import { useFormContext } from "react-hook-form";
 import { InputHTMLAttributes } from "react";
 import { JobApplication } from "../../interfaces/jobApplication";
@@ -12,15 +13,6 @@ const GenericInput: FC<GenericInputProps> = ({ inputProps }) => {
     register,
     formState: { errors },
   } = useFormContext();
-  // const [errorMsg, setErrorMsg] = useState<string | undefined>("");
-
-  // useEffect(() => {
-  //   const errorObj = Object.entries(errors);
-  //   const errMsg = errorObj.find((ele) => ele[0] === inputProps?.name);
-  //   if (errMsg) {
-  //     setErrorMsg(errMsg[1]?.message?.toString());
-  //   }
-  // }, []);
 
   return (
     <div key={inputProps.name} className=" sm:col-span-6 col-span-12  ">
@@ -35,7 +27,7 @@ const GenericInput: FC<GenericInputProps> = ({ inputProps }) => {
           className=" p-2 gap-1  w-[100%] bg-[#fff] border-0 outline-none"
         />
         <p className=" text-white text-[14px] font-medium flex justify-end">
-          {/* {errors[inputProps?.name!]?.message as string} */}
+          {errors[inputProps?.name!]?.message as string}
         </p>
       </div>
     </div>

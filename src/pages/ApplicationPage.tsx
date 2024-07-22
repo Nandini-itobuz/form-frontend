@@ -2,19 +2,19 @@ import { Dispatch, FC, SetStateAction } from "react";
 import GenericInput from "../components/FormInputs/GenericInput";
 import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
 import { ApplicationClient } from "../config/axiosInstance";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SelectFormInput from "../components/FormInputs/SelectFormInput";
+import { handleSwalFire, successSwalFire } from "../helper/swal";
 import { applicationZodSchema } from "../validator/validationFormSchmea";
 
 interface ApplicationPageInterface {
   setShowModal: Dispatch<SetStateAction<boolean>>;
-  editableId?: string | null | undefined;
   setFormData: Dispatch<SetStateAction<JobApplication | null>>;
+  editableId?: string | null | undefined;
 }
 
 const ApplicationPage: FC<ApplicationPageInterface> = ({
@@ -121,10 +121,11 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
         `/create-application/${editableId}`,
         data,
       );
-      response.data.data && setShowModal(false);
+      response.data.success && setShowModal(false);
+      response.data.success && successSwalFire('Your application is submitted successfully')
       setFormData(response.data.data);
-    } catch (err: any) {
-      toast(err.response.data.message);
+    } catch (err) {
+      console.log(err)
     }
   };
 
@@ -134,7 +135,6 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
 
   return (
     <>
-      <ToastContainer />
       <FormProvider {...method}>
         <form
           className="w-[100%] rounded-lg"
