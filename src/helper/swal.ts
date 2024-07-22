@@ -15,11 +15,21 @@ export const handleSwalFire = (titleData: string, confirmText: string, denyText:
     }).then((result) => {
         if (result.isConfirmed) {
             handleFunction();
-            Swal.fire(`${successText}`, "", "success");
+            Swal.fire({
+                title : successText,
+                customClass :{
+                    confirmButton : "confirm-button-class"
+                }
+            });
         }
     });
 }
 
-export const successSwalFire = (message) => {
-    Swal.fire(message);
+export const successSwalFire = (message : string) => {
+    Swal.fire({
+        title : message,
+        customClass :{
+            confirmButton : "confirm-button-class"
+        }
+    });
 }

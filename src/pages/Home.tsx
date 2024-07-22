@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../components/Button";
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
 import TableContent from "../components/TableContent";
-import SelectInput from "../components/FormInputs/SelectInput";
 import { PageSize } from "../enums/pageSize";
 import { ApplicationClient } from "../config/axiosInstance";
 import FormModal from "../components/FormModal";
 import { handleSwalFire } from "../helper/swal";
+import { useForm, FormProvider } from "react-hook-form";
+import SelectFormInput from "../components/FormInputs/SelectFormInput";
 
 const Home = () => {
+
+  const method = useForm();
   const [page, setPage] = useState<string>("1");
   const [totalPages, setTotalPages] = useState<string>("1");
   const [allForms, setAllForms] = useState<JobApplication[] | null>([]);
   const [showModal, setShowodal] = useState<boolean>(false);
-  const [formData, setFormData] = useState<JobApplication | null>(null);
+  const [_formData, setFormData] = useState<JobApplication | null>(null);
   const [showFilteredPosition, setShowFilteredPosition] =
     useState<string>("Sort By");
 
   const availablePositions = [
+    Position.ALL,
     Position.FRONTEND_DEVELOPER,
     Position.BACKEND_DEVELOPER,
     Position.INTERN,
@@ -88,16 +92,13 @@ const Home = () => {
           </Button>
           <Button handleClick={deleteAllApplications}>Delete All</Button>
           <div className=" md:col-span-3 px-4 col-span-6 hover:cursor-pointer  bg-[#f5f5f5] font-bold">
-            <SelectInput
-              value={showFilteredPosition}
-              valueOptions={availablePositions}
-              labelOption="Sort By"
-              handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            <FormProvider {...method}>
+              <form onChange={method.handleSubmit((data) => {
                 setPage("1");
-                setShowFilteredPosition(e.target.value);
-              }}
-              name="position"
-            />
+                setShowFilteredPosition(data.position);})} >
+                <SelectFormInput name="position" valueOptions={availablePositions} />
+              </form>
+            </FormProvider>
           </div>
         </div>
 
@@ -137,14 +138,14 @@ const Home = () => {
         </button>
         <div className=" sm:col-span-3 col-span-12 flex justify-center">
           <span className="py-2 px-5 font-bold">Page Size:</span>
-          <SelectInput
-            value={pageSize}
-            handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+          <FormProvider {...method}>
+            <form onChange={method.handleSubmit((data) => {
               setPage("1");
-              setPageSize(e.target.value);
-            }}
-            valueOptions={pageSizeOptions}
-          />
+              setPageSize(data.pageSize);
+            })}>
+            <SelectFormInput valueOptions={pageSizeOptions} name="pageSize" />
+            </form>
+          </FormProvider>
         </div>
       </div>
 

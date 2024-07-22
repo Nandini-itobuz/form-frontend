@@ -15,10 +15,6 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
   const [showTableContent, setShowTableContent] = useState(true);
   const [formData, setFormData] = useState<JobApplication | null>(inputProps);
 
-  const handleEdit = () => {
-    setShowodal(true);
-  };
-
   const handleDeleteData = async() => {
     const response = await ApplicationClient.post(`/delete-application`, {
       id: inputProps?._id,
@@ -44,7 +40,7 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
             </div>
           </div>
           <div className=" lg:col-span-4 col-span-12  my-3 flex justify-end gap-4">
-            <div className=" hover:cursor-pointer" onClick={handleEdit}>
+            <div className=" hover:cursor-pointer" onClick={() => {setShowodal(true)}}>
               <MdEdit />
             </div>
             <div className=" hover:cursor-pointer" onClick={handleDelete}>

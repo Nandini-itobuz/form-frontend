@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction } from "react";
-import GenericInput from "../components/FormInputs/GenericInput";
+import GenericInput from "./FormInputs/GenericInput";
 import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { JobApplication } from "../interfaces/jobApplication";
@@ -7,8 +7,8 @@ import { Position } from "../enums/positions";
 import { ApplicationClient } from "../config/axiosInstance";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import SelectFormInput from "../components/FormInputs/SelectFormInput";
-import { handleSwalFire, successSwalFire } from "../helper/swal";
+import SelectFormInput from "./FormInputs/SelectFormInput";
+import { successSwalFire } from "../helper/swal";
 import { applicationZodSchema } from "../validator/validationFormSchmea";
 
 interface ApplicationPageInterface {
@@ -134,7 +134,6 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
   }, []);
 
   return (
-    <>
       <FormProvider {...method}>
         <form
           className="w-[100%] rounded-lg"
@@ -196,7 +195,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           </div>
         </form>
       </FormProvider>
-    </>
+
   );
 };
 

@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { GiCancel } from "react-icons/gi";
-import ApplicationPage from "../pages/ApplicationPage";
+import ApplicationPage from "./ApplicationPage";
 import { JobApplication } from "../interfaces/jobApplication";
 
 interface FormModalInterface {
