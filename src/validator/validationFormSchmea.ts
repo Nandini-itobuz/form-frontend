@@ -12,7 +12,6 @@ export const applicationZodSchema = z.object({
   institution: z.coerce.string().min(1, { message: "This is a required field" }),
   degree: z.coerce.string().min(1, { message: "This is a required field" }),
   startDate: z.coerce.string().optional(),
-  feildOfStudy: z.coerce.string().optional(),
   score: z.coerce.number().min(1, { message: "This is a required field" }),
   yearsOfExperience: z.coerce
     .number()

@@ -1,7 +1,8 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import GenericInput from "./FormInputs/GenericInput";
 import { useEffect } from "react";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
 import { ApplicationClient } from "../config/axiosInstance";
@@ -22,6 +23,9 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
   editableId,
   setFormData,
 }) => {
+
+  const notify = (message : string) => toast(message);
+
   const method = useForm<JobApplication>({
     resolver: zodResolver(applicationZodSchema),
   });
@@ -69,11 +73,6 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       title: "Degree",
     },
     {
-      name: "fieldOfStudy",
-      title: "Feild of Study",
-      required: false,
-    },
-    {
       name: "score",
       type: "number",
       title: "Score",
@@ -109,6 +108,8 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       const response = await ApplicationClient.get(
         `/view-application/${editableId}`,
       );
+      console.log(response)
+      response.data.application.startDate = response.data.application.startDate.slice(0,10) 
       method.reset(response.data.application);
     } catch (err) {
       console.log(err);
@@ -124,8 +125,8 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       response.data.success && setShowModal(false);
       response.data.success && successSwalFire('Your application is submitted successfully')
       setFormData(response.data.data);
-    } catch (err) {
-      console.log(err)
+    } catch (err : any) {
+      notify(err.response.data.message)
     }
   };
 
@@ -134,6 +135,8 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
   }, []);
 
   return (
+    <>
+      <ToastContainer />
       <FormProvider {...method}>
         <form
           className="w-[100%] rounded-lg"
@@ -176,7 +179,6 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
                   </div>
                   <SelectFormInput
                     valueOptions={availablePositions}
-                    labelOption="Positions"
                     name="position"
                   />
                 </div>
@@ -195,6 +197,8 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           </div>
         </form>
       </FormProvider>
+    </>
+
 
   );
 };

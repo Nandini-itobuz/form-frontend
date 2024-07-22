@@ -5,6 +5,7 @@ import FormModal from "./FormModal";
 import { ApplicationClient } from "../config/axiosInstance";
 import { JobApplication } from "../interfaces/jobApplication";
 import { handleSwalFire } from "../helper/swal";
+import DetailContentModal from "./DetailContentModal";
 
 interface TableContent {
   inputProps: JobApplication;
@@ -14,6 +15,7 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
   const [showModal, setShowodal] = useState<boolean>(false);
   const [showTableContent, setShowTableContent] = useState(true);
   const [formData, setFormData] = useState<JobApplication | null>(inputProps);
+  const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
 
   const handleDeleteData = async() => {
     const response = await ApplicationClient.post(`/delete-application`, {
@@ -56,6 +58,8 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
           setFormData={setFormData}
         />
       )}
+
+      {showDetailModal && <DetailContentModal />}
     </>
   );
 };

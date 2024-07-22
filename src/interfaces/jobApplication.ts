@@ -9,7 +9,6 @@ export interface JobApplication {
   position: string;
   institution: string;
   degree: string;
-  fieldOfStudy?: string;
   startDate?: string;
   score: number;
   yearsOfExperience: number;
