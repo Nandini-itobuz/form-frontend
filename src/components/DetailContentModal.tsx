@@ -81,7 +81,7 @@ const DetailContentModal: FC<DetailContent> = ({ setShowDetailModal, inputProps 
 				</div>
 
 
-				<div className="bg-[#62abb4] w-[100%] mx-auto sm:p-10 p-2 my-5 rounded-lg overflow-y-scroll no-scrollbar">
+				<div className="bg-[#265077] w-[100%] mx-auto sm:p-10 p-2 my-5 rounded-lg overflow-y-scroll no-scrollbar">
 
 					{detailValues.map((ele) => (
 						ele.value && <div className=" flex flex-col sm:flex-row w-[100%] sm:items-center sm:gap-5 justify-between my-3 ">

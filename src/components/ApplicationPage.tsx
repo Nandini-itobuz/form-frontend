@@ -142,7 +142,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           className="w-[100%] rounded-lg"
           onSubmit={method.handleSubmit(handleFormSubmit)}
         >
-          <div className="bg-[#62abb4]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+          <div className="bg-[#265077]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
             <p className=" font-bold mb-5">Personal Information</p>
             <div className="  grid grid-cols-12 gap-5 ">
               {personalInputFields.map((ele) => (
@@ -151,7 +151,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
             </div>
           </div>
 
-          <div className="bg-[#62abb4]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+          <div className="bg-[#265077]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
             <p className=" font-bold mb-5 text-whi">Contact Details</p>
             <div className="  grid grid-cols-12 gap-5 ">
               {contactInputFields.map((ele) => (
@@ -160,7 +160,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
             </div>
           </div>
 
-          <div className="bg-[#62abb4]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+          <div className="bg-[#265077]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
             <p className=" font-bold mb-5">Educational History</p>
             <div className="  grid grid-cols-12 gap-5 ">
               {educaionalInputFields.map((ele) => (
@@ -169,7 +169,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
             </div>
           </div>
 
-          <div className="bg-[#62abb4]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+          <div className="bg-[#265077]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
             <p className=" font-bold mb-5">Job Details</p>
             <div className="  grid grid-cols-12 gap-5 ">
               <div className=" sm:col-span-6 col-span-12">
@@ -192,7 +192,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           <div className=" flex justify-center mb-5">
             <input
               type="submit"
-              className=" py-2 px-10 bg-[#62abb4] text-white rounded-sm font-bold hover:cursor-pointer"
+              className=" py-2 px-10 bg-[#265077] text-white rounded-sm font-bold hover:cursor-pointer"
             />
           </div>
         </form>

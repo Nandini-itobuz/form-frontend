@@ -9,6 +9,8 @@ import FormModal from "../components/FormModal";
 import { handleSwalFire } from "../helper/swal";
 import { useForm, FormProvider } from "react-hook-form";
 import SelectFormInput from "../components/FormInputs/SelectFormInput";
+import { RiDeleteBinFill } from "react-icons/ri";
+import { IoAddCircle } from "react-icons/io5";
 
 const Home = () => {
 
@@ -73,7 +75,7 @@ const Home = () => {
   }, [page, pageSize, showFilteredPosition]);
 
   return (
-    <div className=" z-0 min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto] bg-[#62abb4] ">
+    <div className=" z-0 min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto] bg-[#265077] ">
       <div>
         <div className=" grid grid-cols-12 md:gap-10 gap-2 px-2 justify-center items-center">
           <Button
@@ -81,21 +83,15 @@ const Home = () => {
               setShowodal(true);
             }}
           >
-            Add
+            <span className=" flex justify-center items-center gap-1"><IoAddCircle color="#265077" size={'20px'} /> Add</span>
           </Button>
-          <Button
-            handleClick={() => {
-              setShowFilteredPosition("Sort By");
-            }}
-          >
-            View All
-          </Button>
-          <Button handleClick={deleteAllApplications}>Delete All</Button>
-          <div className=" md:col-span-3 px-4 col-span-6 hover:cursor-pointer  bg-[#f5f5f5] font-bold">
+          <Button handleClick={deleteAllApplications}><span className=" flex justify-center items-center gap-1"><RiDeleteBinFill color="#265077" size={'20px'} />Delete All</span></Button>
+          <div className=" md:col-span-4 px-4 col-span-6 hover:cursor-pointer rounded-md  bg-[#f5f5f5] font-bold">
             <FormProvider {...method}>
               <form onChange={method.handleSubmit((data) => {
                 setPage("1");
-                setShowFilteredPosition(data.position);})} >
+                setShowFilteredPosition(data.position);
+              })} >
                 <SelectFormInput name="position" valueOptions={availablePositions} />
               </form>
             </FormProvider>
@@ -117,18 +113,18 @@ const Home = () => {
 
       <div className=" grid grid-cols-12 gap-2 mb-10 p-2">
         <button
-          className=" sm:col-span-3 col-span-4  py-2 px-5 bg-[#f5f5f5] font-bold"
+          className=" rounded-md sm:col-span-3 col-span-4  py-2 px-5 bg-[#f5f5f5] font-bold"
           onClick={() => {
             Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString());
           }}
         >
           Previous
         </button>
-        <button className=" sm:col-span-3 col-span-4 py-2 px-5 bg-[#f5f5f5] font-bold">
+        <button className=" rounded-md sm:col-span-3 col-span-4 py-2 px-5 bg-[#f5f5f5] font-bold">
           {page} of {totalPages}
         </button>
         <button
-          className=" sm:col-span-3 col-span-4 py-2 px-5 bg-[#f5f5f5] font-bold"
+          className=" rounded-md sm:col-span-3 col-span-4 py-2 px-5 bg-[#f5f5f5] font-bold"
           onClick={() => {
             Number(page) + 1 <= Number(totalPages) &&
               setPage((Number(page) + 1).toString());
@@ -143,7 +139,7 @@ const Home = () => {
               setPage("1");
               setPageSize(data.pageSize);
             })}>
-            <SelectFormInput valueOptions={pageSizeOptions} name="pageSize" />
+              <SelectFormInput valueOptions={pageSizeOptions} name="pageSize" />
             </form>
           </FormProvider>
         </div>

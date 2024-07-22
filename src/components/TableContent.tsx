@@ -28,7 +28,7 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
   return (
     <>
       {showTableContent && (
-        <div className="w-[100%] xl:w-[1200px] my-2 grid grid-cols-12 bg-[#f5f5f5] justify-between  items-center px-3 py-1 " onClick={() => { setShowDetailModal(true) }} >
+        <div className="w-[100%] xl:w-[1200px] my-2 grid grid-cols-12 bg-[#f5f5f5] justify-between  items-center px-3 py-1  rounded-lg" onClick={() => { setShowDetailModal(true) }} >
           <div className=" col-span-8 grid grid-cols-12 justify-center lg:gap-5">
             <div className=" lg:col-span-3 col-span-12">
               {formData?.firstName} {formData?.lastName}

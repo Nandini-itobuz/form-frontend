@@ -17,7 +17,7 @@ const SelectFormInput: FC<selectInputInterface> = ({
     <div>
       <select
         {...register(name as keyof JobApplication, { required: true })}
-        className=" py-2 px-3 gap-1 w-[100%] bg-[#f5f5f5] border-0 outline-none"
+        className=" rounded-md py-2 px-3 gap-1 w-[100%] bg-[#f5f5f5] border-0 outline-none "
       >
         {valueOptions?.map((ele) => (
           <option key={ele} value={ele}>
