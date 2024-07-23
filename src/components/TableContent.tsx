@@ -12,6 +12,7 @@ interface TableContent {
 }
 
 const TableContent: FC<TableContent> = ({ inputProps }) => {
+
   const [showModal, setShowodal] = useState<boolean>(false);
   const [showTableContent, setShowTableContent] = useState(true);
   const [formData, setFormData] = useState<JobApplication | null>(inputProps);
@@ -24,11 +25,13 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
     response.data.success && setShowTableContent(false);
   };
 
+  
+
   return (
     <>
       {showTableContent && (
         <div
-          className=" xl:w-[1200px] my-2 grid grid-cols-12 bg-[#f5f5f5] bg-opacity-[0.2] text-white justify-between  items-center px-3 py-1  rounded-lg"
+          className="w-[100%] my-2 grid grid-cols-12 bg-[#f5f5f5] bg-opacity-[0.2] text-white justify-between  items-center px-3 py-1  rounded-lg"
           onClick={() => {
             setShowDetailModal(true);
           }}

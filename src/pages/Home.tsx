@@ -7,7 +7,14 @@ import FormModal from "../components/FormModal";
 import { handleSwalFire } from "../helper/swal";
 import { useForm, FormProvider } from "react-hook-form";
 import SelectFormInput from "../components/FormInputs/SelectFormInput";
-import Heading from "../components/Heading";
+import { FaForward } from "react-icons/fa";
+import { FaBackward } from "react-icons/fa";
+import { Button } from "../components/Button";
+import { RiDeleteBinFill } from "react-icons/ri";
+import { IoAddCircle } from "react-icons/io5";
+import FilterData from "../components/FilterData";
+import SearchBar from "../components/SearchBar";
+import { Position } from "../enums/positions";
 
 const Home = () => {
   const method = useForm();
@@ -17,37 +24,24 @@ const Home = () => {
   const [showModal, setShowodal] = useState<boolean>(false);
   const [_formData, setFormData] = useState<JobApplication | null>(null);
   const [showFilteredPosition, setShowFilteredPosition] =
-    useState<string>("All");
+    useState<string>(Position.ALL);
   const [showPagination, setShowPagination] = useState<boolean>(true);
   const [pageSize, setPageSize] = useState<string>("5");
 
   const getAllUser = async (): Promise<void> => {
-    try {
-      const response =
-        showFilteredPosition === "Sort By"
-          ? await ApplicationClient.get(
-              `/view-applications/${page}/${pageSize}`,
-            )
-          : await ApplicationClient.get(
-              `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
-            );
-      setTotalPages(response.data.data.totalPages);
-      setAllForms(response.data.data.applicationData);
-    } catch (err) {
-      console.log(err);
-    }
+    const response =
+      await ApplicationClient.get(
+        `/view-applications/${showFilteredPosition}/${page}/${pageSize}`);
+    setTotalPages(response.data.data.totalPages);
+    setAllForms(response.data.data.applicationData);
   };
 
   const deleteApplications = async (): Promise<void> => {
-    try {
-      const response = await ApplicationClient.post(`/delete-application`, {
-        id: null,
-      });
-      response.data.success && setAllForms(null);
-      getAllUser();
-    } catch (err) {
-      console.log(err);
-    }
+    const response = await ApplicationClient.post(`/delete-application`, {
+      id: null,
+    });
+    response.data.success && setAllForms(null);
+    getAllUser();
   };
 
   const deleteAllApplications = async (): Promise<void> =>
@@ -59,7 +53,7 @@ const Home = () => {
       "Deleted Successfully!",
     );
 
-  const searchItems = async (data: any) => {
+  const searchItems = async (data: { [key: string]: string }) => {
     const name = data.searchBar.trim();
     if (!name.length) {
       setShowPagination(true);
@@ -79,53 +73,69 @@ const Home = () => {
   }, [page, pageSize, showFilteredPosition]);
 
   return (
-    <div className=" px-3 z-0 min-h-[100vh]  flex flex-col gap-3 py-5 justify-between items-center font-[Roboto]  bg-custom-bg bg-cover bg-no-repeat  bg-center ">
-      <div>
-        <Heading
-          setShowodal={setShowodal}
-          searchItems={searchItems}
-          deleteAllApplications={deleteAllApplications}
-          setPage={setPage}
-          setShowFilteredPosition={setShowFilteredPosition}
-        />
+    <div className="flex flex-col items-center gap-3 p-3 bg-custom-bg bg-cover bg-no-repeat bg-center min-h-[100vh] ">
 
-        <div className=" sm:max-h-[70vh] max-h-[60vh] overflow-x-scroll no-scrollbar my-10 box-border px-4 xl:px-0">
-          {allForms && allForms.length ? (
-            allForms.map((ele) => (
-              <TableContent key={ele._id} inputProps={ele} />
-            ))
-          ) : (
-            <div className=" xl:w-[1200px] my-2 font-bold text-white px-3 py-1">
-              No data
-            </div>
-          )}
+      <div className=" flex flex-col gap-3 w-[90%]  max-w-[1300px]">
+        <div className=" flex justify-between sm:flex-row flex-col sm:gap-10 gap-1">
+          <Button
+            handleClick={() => {
+              setShowodal(true);
+            }}
+            className="bg-green-700 text-white col-span-1 w-[140px] p-0"
+          >
+            <span className=" flex justify-start items-center gap-1">
+              <IoAddCircle color="#fff" opacity={0.6} size={"20px"} /> Add
+            </span>
+          </Button>
+          <SearchBar searchItems={searchItems} />
+        </div>
+
+        <div className="flex sm:flex-row flex-col justify-between sm:gap-10 gap-1">
+          <Button
+            className=" bg-red-700 text-white w-[140px]"
+            handleClick={deleteAllApplications}
+          >
+            <span className=" flex justify-start items-center gap-1">
+              <RiDeleteBinFill color="#fff" opacity={0.6} size={"20px"} />
+              Delete All
+            </span>
+          </Button>
+
+          <FilterData setPage={setPage} setShowFilteredPosition={setShowFilteredPosition} />
         </div>
       </div>
 
-      {showPagination && (
-        <div className=" grid grid-cols-12 gap-2 mb-10 p-2 text-[14px] text-white">
-          <button
-            className=" rounded-md md:col-span-3 col-span-4  py-2 px-2 bg-[#37374B] font-bold"
-            onClick={() => {
-              Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString());
-            }}
-          >
-            Previous
-          </button>
+      <div className=" max-h-[65vh] overflow-x-scroll no-scrollbar w-[90%] max-w-[1300px] ">
+        {allForms && allForms?.length ? (
+          allForms.map((ele) => (
+            <TableContent key={ele._id} inputProps={ele} />
+          ))
+        ) : (
+          <div className="text-white">
+            No data
+          </div>
+        )}
+      </div>
 
-          <button className=" rounded-md md:col-span-3 col-span-4 py-2 px-2 bg-[#37374B] font-bold">
+
+      {showPagination && (
+        <div className=" flex gap-2 mb-10 text-white mt-auto">
+          <Button className=" border " handleClick={() => { Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString()); }}>
+            <FaBackward opacity={0.6} size={"15px"} />
+          </Button>
+
+          <p className=" rounded-md p-2 bg-[#37374B] ">
             {page} of {totalPages}
-          </button>
-          <button
-            className=" rounded-md md:col-span-3 col-span-4 py-2 px-2 bg-[#37374B] font-bold"
-            onClick={() => {
-              Number(page) + 1 <= Number(totalPages) &&
-                setPage((Number(page) + 1).toString());
-            }}
-          >
-            Next
-          </button>
-          <div className=" md:col-span-3 col-span-12 flex justify-center">
+          </p>
+
+          <Button className=" border" handleClick={() => {
+            Number(page) + 1 <= Number(totalPages) &&
+              setPage((Number(page) + 1).toString());
+          }}>
+            <FaForward opacity={0.6} size={"15px"} />
+          </Button>
+
+          <div className=" flex justify-center">
             <span className="py-2 px-5 font-bold">Page Size:</span>
             <FormProvider {...method}>
               <form

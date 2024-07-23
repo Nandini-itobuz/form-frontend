@@ -16,6 +16,7 @@ const DetailContentModal: FC<DetailContent> = ({
   setShowDetailModal,
   inputProps,
 }) => {
+  
   const detailValues: DetailValueInterface[] = [
     {
       name: "First Name",

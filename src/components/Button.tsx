@@ -1,4 +1,3 @@
-import { FC } from "react";
 
 interface ButtonProps {
   children?: JSX.Element;
@@ -6,10 +5,10 @@ interface ButtonProps {
   className?: string;
 }
 
-const Button: FC<ButtonProps> = ({ children, handleClick, className }) => {
+export const Button= ({ children, handleClick, className } : ButtonProps) => {
   return (
     <button
-      className={` rounded-md py-2 px-4 bg-[#f5f5f5] font-bold ${className}`}
+      className={` rounded-md p-2  font-bold ${className}`}
       onClick={handleClick}
     >
       {children}
@@ -17,4 +16,4 @@ const Button: FC<ButtonProps> = ({ children, handleClick, className }) => {
   );
 };
 
-export default Button;
+

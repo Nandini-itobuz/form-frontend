@@ -99,13 +99,6 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
     },
   ];
 
-  const availablePositions = [
-    Position.FRONTEND_DEVELOPER,
-    Position.BACKEND_DEVELOPER,
-    Position.INTERN,
-    Position.QA,
-  ];
-
   const handleFormEdit = async (): Promise<void> => {
     try {
       if (!editableId) {
@@ -114,7 +107,6 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       const response = await ApplicationClient.get(
         `/view-application/${editableId}`,
       );
-      console.log(response);
       response.data.application.startDate =
         response.data.application.startDate.slice(0, 10);
       method.reset(response.data.application);
@@ -170,7 +162,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
                     What position are you looking for?
                   </div>
                   <SelectFormInput
-                    valueOptions={availablePositions}
+                    valueOptions={Object.values(Position)}
                     name="position"
                   />
                 </div>
