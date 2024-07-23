@@ -24,63 +24,70 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
   setFormData,
 }) => {
   const notify = (message: string) => toast(message);
-
   const method = useForm<JobApplication>({
     resolver: zodResolver(applicationZodSchema),
   });
 
-  const personalInputFields = [
+  const inputDetails = [
     {
-      name: "firstName",
-      title: "First Name",
+      subTitle: "Personal Information",
+      data: [
+        {
+          name: "firstName",
+          title: "First Name",
+        },
+        {
+          name: "middleName",
+          required: false,
+          title: "Middle Name",
+        },
+        {
+          name: "lastName",
+          title: "Last Name",
+        },
+        {
+          name: "age",
+          type: "number",
+          title: "Age",
+        },
+      ],
     },
     {
-      name: "middleName",
-      required: false,
-      title: "Middle Name",
+      subTitle: "Contact Details",
+      data: [
+        {
+          name: "phone",
+          type: "tel",
+          title: "Phone Number",
+        },
+        {
+          name: "email",
+          title: "Email Id",
+        },
+      ],
     },
     {
-      name: "lastName",
-      title: "Last Name",
-    },
-    {
-      name: "age",
-      type: "number",
-      title: "Age",
-    },
-  ];
-
-  const contactInputFields = [
-    {
-      name: "phone",
-      type: "tel",
-      title: "Phone Number",
-    },
-    {
-      name: "email",
-      title: "Email Id",
-    },
-  ];
-
-  const educaionalInputFields = [
-    {
-      name: "institution",
-      title: "Institution/University",
-    },
-    {
-      name: "degree",
-      title: "Degree",
-    },
-    {
-      name: "score",
-      type: "number",
-      title: "Score",
-    },
-    {
-      name: "startDate",
-      type: "date",
-      title: "Start Date",
-      required: false,
+      subtitle: "Educational History",
+      data: [
+        {
+          name: "institution",
+          title: "Institution/University",
+        },
+        {
+          name: "degree",
+          title: "Degree",
+        },
+        {
+          name: "score",
+          type: "number",
+          title: "Score",
+        },
+        {
+          name: "startDate",
+          type: "date",
+          title: "Start Date",
+        },
+      ],
     },
   ];
 
@@ -143,32 +150,16 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           className="w-[100%] rounded-lg"
           onSubmit={method.handleSubmit(handleFormSubmit)}
         >
-          <div className=" bg-custom-bg bg-opacity-10  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
-            <p className=" font-bold mb-5 text-white">Personal Information</p>
-            <div className="  grid grid-cols-12 gap-5 text-white ">
-              {personalInputFields.map((ele) => (
-                <GenericInput key={ele?.name} inputProps={ele} />
-              ))}
+          {inputDetails.map((ele) => (
+            <div className=" bg-custom-bg bg-opacity-10  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+              <p className=" font-bold mb-5 text-white">{ele.subTitle}</p>
+              <div className="  grid grid-cols-12 gap-5 text-white ">
+                {ele.data.map((ele) => (
+                  <GenericInput key={ele?.name} inputProps={ele} />
+                ))}
+              </div>
             </div>
-          </div>
-
-          <div className=" bg-custom-bg  max-w-[1200px] mx-auto sm:p-10 p-2 my- text-white rounded-lg">
-            <p className=" font-bold mb-5 text-white">Contact Details</p>
-            <div className="  grid grid-cols-12 gap-5 ">
-              {contactInputFields.map((ele) => (
-                <GenericInput key={ele?.name} inputProps={ele} />
-              ))}
-            </div>
-          </div>
-
-          <div className=" bg-custom-bg  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
-            <p className=" font-bold mb-5 text-white">Educational History</p>
-            <div className="  grid grid-cols-12 gap-5 ">
-              {educaionalInputFields.map((ele) => (
-                <GenericInput key={ele?.name} inputProps={ele} />
-              ))}
-            </div>
-          </div>
+          ))}
 
           <div className=" bg-custom-bg  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
             <p className=" font-bold mb-5 text-white">Job Details</p>

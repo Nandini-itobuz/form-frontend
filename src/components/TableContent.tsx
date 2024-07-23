@@ -28,24 +28,28 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
     <>
       {showTableContent && (
         <div
-          className="w-[100%] xl:w-[1200px] my-2 grid grid-cols-12 bg-[#f5f5f5] bg-opacity-[0.2] text-white justify-between  items-center px-3 py-1  rounded-lg"
+          className=" xl:w-[1200px] my-2 grid grid-cols-12 bg-[#f5f5f5] bg-opacity-[0.2] text-white justify-between  items-center px-3 py-1  rounded-lg"
           onClick={() => {
             setShowDetailModal(true);
           }}
         >
-          <div className=" col-span-8 grid grid-cols-12 justify-center lg:gap-5">
-            <div className=" lg:col-span-3 col-span-12">
+          <div className="grid grid-cols-12 justify-center lg:gap-5 col-span-10">
+            <div className=" md:col-span-4 lg:col-span-3 col-span-12">
               {formData?.firstName} {formData?.lastName}
             </div>
-            <div className=" lg:col-span-4 col-span-12">{formData?.email}</div>
-            <div className=" lg:col-span-1 col-span-12">{formData?.age}</div>
-            <div className=" lg:col-span-4 col-span-12">
+            <div className=" md:col-span-5 lg:col-span-3 col-span-12">
+              {formData?.email}
+            </div>
+            <div className=" md:col-span-1 lg:col-span-2 col-span-12">
+              {formData?.age}
+            </div>
+            <div className=" md:col-span-2 lg:col-span-4 col-span-12">
               {formData?.position}
             </div>
           </div>
-          <div className=" lg:col-span-4 col-span-12  my-3 flex justify-end gap-4">
+          <div className=" md:col-span-2 col-span-12 my-3 flex justify-end gap-4">
             <div
-              className=" hover:cursor-pointer"
+              className=" hover:cursor-pointer bg-green-700 rounded-[50%] p-[5px]"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowodal(true);
@@ -54,7 +58,7 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
               <MdEdit size={"20px"} />
             </div>
             <div
-              className=" hover:cursor-pointer"
+              className=" hover:cursor-pointer bg-red-700 rounded-[50%] p-[5px]"
               onClick={(e) => {
                 e.stopPropagation();
                 handleSwalFire(
@@ -66,7 +70,7 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
                 );
               }}
             >
-              <MdDeleteSweep size={"20px"}  />
+              <MdDeleteSweep size={"20px"} />
             </div>
           </div>
         </div>

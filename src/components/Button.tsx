@@ -7,7 +7,6 @@ interface ButtonProps {
 }
 
 const Button: FC<ButtonProps> = ({ children, handleClick, className }) => {
-  console.log(className);
   return (
     <button
       className={` rounded-md py-2 px-4 bg-[#f5f5f5] font-bold ${className}`}
