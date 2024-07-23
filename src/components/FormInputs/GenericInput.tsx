@@ -16,18 +16,18 @@ const GenericInput: FC<GenericInputProps> = ({ inputProps }) => {
 
   return (
     <div key={inputProps.name} className=" sm:col-span-6 col-span-12  ">
-      <div className=" flex flex-col w-[100%]">
+      <div className=" flex flex-col w-[100%] gap-2">
         <div className=" font-medium text-white">{inputProps?.title}</div>
         <input
           {...inputProps}
           placeholder={inputProps.title}
           {...register(inputProps.name as keyof JobApplication)}
-          className={` p-2 gap-1  w-[100%] bg-[#fff] border-0 outline-none ${inputProps?.className}`}
+          className={` p-2 gap-1  w-[100%] bg-[#37374B] border-0  rounded-md outline-none font-medium text-white ${inputProps?.className}`}
         />
         <p className=" text-white text-[14px] font-medium flex justify-start">
           {errors[inputProps?.name!]?.message as string}
         </p>
-      </div> 
+      </div>
     </div>
   );
 };

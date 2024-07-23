@@ -7,17 +7,14 @@ interface selectInputInterface {
   valueOptions?: string[];
 }
 
-const SelectFormInput: FC<selectInputInterface> = ({
-  name,
-  valueOptions,
-}) => {
+const SelectFormInput: FC<selectInputInterface> = ({ name, valueOptions }) => {
   const { register } = useFormContext();
 
   return (
     <div>
       <select
         {...register(name as keyof JobApplication, { required: true })}
-        className=" rounded-md py-2 px-3 gap-1 w-[100%] bg-[#f5f5f5] border-0 outline-none "
+        className=" rounded-md py-2 px-3 gap-1 w-[100%] bg-[#37374B] text-white border-0 outline-none "
       >
         {valueOptions?.map((ele) => (
           <option key={ele} value={ele}>

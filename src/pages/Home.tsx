@@ -9,11 +9,11 @@ import FormModal from "../components/FormModal";
 import { handleSwalFire } from "../helper/swal";
 import { useForm, FormProvider } from "react-hook-form";
 import SelectFormInput from "../components/FormInputs/SelectFormInput";
+import { FaFilter } from "react-icons/fa";
 import { RiDeleteBinFill } from "react-icons/ri";
 import { IoAddCircle } from "react-icons/io5";
 
 const Home = () => {
-
   const method = useForm();
   const [page, setPage] = useState<string>("1");
   const [totalPages, setTotalPages] = useState<string>("1");
@@ -44,11 +44,11 @@ const Home = () => {
       const response =
         showFilteredPosition === "Sort By"
           ? await ApplicationClient.get(
-            `/view-applications/${page}/${pageSize}`,
-          )
+              `/view-applications/${page}/${pageSize}`,
+            )
           : await ApplicationClient.get(
-            `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
-          );
+              `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
+            );
       setTotalPages(response.data.data.totalPages);
       setAllForms(response.data.data.applicationData);
     } catch (err) {
@@ -68,37 +68,64 @@ const Home = () => {
     }
   };
 
-  const deleteAllApplications = async (): Promise<void> => handleSwalFire('Delete All Items?', 'Delete', 'Cancel', deleteApplications, 'Deleted Successfully!')
+  const deleteAllApplications = async (): Promise<void> =>
+    handleSwalFire(
+      "Delete All Items?",
+      "Delete",
+      "Cancel",
+      deleteApplications,
+      "Deleted Successfully!",
+    );
 
   useEffect(() => {
     getAllUser();
   }, [page, pageSize, showFilteredPosition]);
 
   return (
-    <div className=" z-0 min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto] bg-[#265077] ">
+    <div className=" px-3 z-0 min-h-[100vh]  flex flex-col gap-3  py-5 justify-between items-center font-[Roboto]  bg-custom-bg bg-cover bg-no-repeat  bg-center ">
       <div>
-        <div className=" grid grid-cols-12 md:gap-10 gap-2 px-2 justify-center items-center">
+        <div className=" flex flex-col gap-3 px-4 w-[100%]  ">
           <Button
             handleClick={() => {
               setShowodal(true);
             }}
+            className="bg-green-700 text-white col-span-1 w-[140px]"
           >
-            <span className=" flex justify-center items-center gap-1"><IoAddCircle color="#265077" size={'20px'} /> Add</span>
+            <span className=" flex justify-start items-center gap-1">
+              <IoAddCircle color="#fff" opacity={0.6} size={"20px"} /> Add
+            </span>
           </Button>
-          <Button handleClick={deleteAllApplications}><span className=" flex justify-center items-center gap-1"><RiDeleteBinFill color="#265077" size={'20px'} />Delete All</span></Button>
-          <div className=" md:col-span-4 px-4 col-span-6 hover:cursor-pointer rounded-md  bg-[#f5f5f5] font-bold">
-            <FormProvider {...method}>
-              <form onChange={method.handleSubmit((data) => {
-                setPage("1");
-                setShowFilteredPosition(data.position);
-              })} >
-                <SelectFormInput name="position" valueOptions={availablePositions} />
-              </form>
-            </FormProvider>
+          <div className=" flex flex-col sm:flex-row sm:justify-between gap-3 ">
+            <Button
+              className=" bg-red-700 text-white w-[140px]"
+              handleClick={deleteAllApplications}
+            >
+              <span className=" flex justify-start items-center gap-1">
+                <RiDeleteBinFill color="#fff" opacity={0.6} size={"20px"} />
+                Delete All
+              </span>
+            </Button>
+            <div className=" flex justify-end px-4 hover:cursor-pointer rounded-md  bg-[#37374B] font-bold w-[220px]">
+              <FormProvider {...method}>
+                <form
+                  onChange={method.handleSubmit((data) => {
+                    setPage("1");
+                    setShowFilteredPosition(data.position);
+                  })}
+                  className=" flex justify-center items-center "
+                >
+                  <FaFilter color="#fff" opacity={0.6} size={"20px"} />
+                  <SelectFormInput
+                    name="position"
+                    valueOptions={availablePositions}
+                  />
+                </form>
+              </FormProvider>
+            </div>
           </div>
         </div>
 
-        <div className=" sm:max-h-[70vh] max-h-[60vh] overflow-x-scroll no-scrollbar my-10 max-w-[1200px]  box-border px-4 xl:px-0">
+        <div className=" sm:max-h-[70vh] max-h-[60vh] overflow-x-scroll no-scrollbar my-10 box-border px-4 xl:px-0">
           {allForms && allForms.length ? (
             allForms.map((ele) => (
               <TableContent key={ele._id} inputProps={ele} />
@@ -111,20 +138,21 @@ const Home = () => {
         </div>
       </div>
 
-      <div className=" grid grid-cols-12 gap-2 mb-10 p-2">
+      <div className=" grid grid-cols-12 gap-2 mb-10 p-2 text-[14px] text-white">
         <button
-          className=" rounded-md sm:col-span-3 col-span-4  py-2 px-5 bg-[#f5f5f5] font-bold"
+          className=" rounded-md md:col-span-3 col-span-4  py-2 px-2 bg-[#37374B] font-bold"
           onClick={() => {
             Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString());
           }}
         >
           Previous
         </button>
-        <button className=" rounded-md sm:col-span-3 col-span-4 py-2 px-5 bg-[#f5f5f5] font-bold">
+
+        <button className=" rounded-md md:col-span-3 col-span-4 py-2 px-2 bg-[#37374B] font-bold">
           {page} of {totalPages}
         </button>
         <button
-          className=" rounded-md sm:col-span-3 col-span-4 py-2 px-5 bg-[#f5f5f5] font-bold"
+          className=" rounded-md md:col-span-3 col-span-4 py-2 px-2 bg-[#37374B] font-bold"
           onClick={() => {
             Number(page) + 1 <= Number(totalPages) &&
               setPage((Number(page) + 1).toString());
@@ -132,13 +160,15 @@ const Home = () => {
         >
           Next
         </button>
-        <div className=" sm:col-span-3 col-span-12 flex justify-center">
+        <div className=" md:col-span-3 col-span-12 flex justify-center">
           <span className="py-2 px-5 font-bold">Page Size:</span>
           <FormProvider {...method}>
-            <form onChange={method.handleSubmit((data) => {
-              setPage("1");
-              setPageSize(data.pageSize);
-            })}>
+            <form
+              onChange={method.handleSubmit((data) => {
+                setPage("1");
+                setPageSize(data.pageSize);
+              })}
+            >
               <SelectFormInput valueOptions={pageSizeOptions} name="pageSize" />
             </form>
           </FormProvider>

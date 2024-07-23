@@ -22,13 +22,17 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
       id: inputProps?._id,
     });
     response.data.success && setShowTableContent(false);
-  }
-
+  };
 
   return (
     <>
       {showTableContent && (
-        <div className="w-[100%] xl:w-[1200px] my-2 grid grid-cols-12 bg-[#f5f5f5] justify-between  items-center px-3 py-1  rounded-lg" onClick={() => { setShowDetailModal(true) }} >
+        <div
+          className="w-[100%] xl:w-[1200px] my-2 grid grid-cols-12 bg-[#f5f5f5] bg-opacity-[0.2] text-white justify-between  items-center px-3 py-1  rounded-lg"
+          onClick={() => {
+            setShowDetailModal(true);
+          }}
+        >
           <div className=" col-span-8 grid grid-cols-12 justify-center lg:gap-5">
             <div className=" lg:col-span-3 col-span-12">
               {formData?.firstName} {formData?.lastName}
@@ -40,14 +44,29 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
             </div>
           </div>
           <div className=" lg:col-span-4 col-span-12  my-3 flex justify-end gap-4">
-            <div className=" hover:cursor-pointer" onClick={(e) => { e.stopPropagation(); setShowodal(true) }}>
-              <MdEdit />
+            <div
+              className=" hover:cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowodal(true);
+              }}
+            >
+              <MdEdit size={"20px"} />
             </div>
-            <div className=" hover:cursor-pointer" onClick={(e) => {
-              e.stopPropagation();
-              handleSwalFire('Delete Item?', "Delete", "cancel", handleDeleteData, "Deleted successfully!")
-            }}>
-              <MdDeleteSweep />
+            <div
+              className=" hover:cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSwalFire(
+                  "Delete Item?",
+                  "Delete",
+                  "cancel",
+                  handleDeleteData,
+                  "Deleted successfully!",
+                );
+              }}
+            >
+              <MdDeleteSweep size={"20px"}  />
             </div>
           </div>
         </div>
@@ -60,8 +79,12 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
         />
       )}
 
-      {showDetailModal && <DetailContentModal inputProps={inputProps} setShowDetailModal={setShowDetailModal}
-      />}
+      {showDetailModal && (
+        <DetailContentModal
+          inputProps={inputProps}
+          setShowDetailModal={setShowDetailModal}
+        />
+      )}
     </>
   );
 };

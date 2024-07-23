@@ -1,14 +1,16 @@
 import { FC } from "react";
 
 interface ButtonProps {
-  children?:  JSX.Element
+  children?: JSX.Element;
   handleClick?: () => void;
+  className?: string;
 }
 
-const Button: FC<ButtonProps> = ({ children, handleClick }) => {
+const Button: FC<ButtonProps> = ({ children, handleClick, className }) => {
+  console.log(className);
   return (
     <button
-      className=" rounded-md  md:col-span-4 col-span-6 py-2  bg-[#f5f5f5] font-bold"
+      className={` rounded-md py-2 px-4 bg-[#f5f5f5] font-bold ${className}`}
       onClick={handleClick}
     >
       {children}

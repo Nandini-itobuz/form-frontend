@@ -1,8 +1,8 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import GenericInput from "./FormInputs/GenericInput";
 import { useEffect } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
 import { ApplicationClient } from "../config/axiosInstance";
@@ -23,8 +23,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
   editableId,
   setFormData,
 }) => {
-
-  const notify = (message : string) => toast(message);
+  const notify = (message: string) => toast(message);
 
   const method = useForm<JobApplication>({
     resolver: zodResolver(applicationZodSchema),
@@ -108,8 +107,9 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       const response = await ApplicationClient.get(
         `/view-application/${editableId}`,
       );
-      console.log(response)
-      response.data.application.startDate = response.data.application.startDate.slice(0,10) 
+      console.log(response);
+      response.data.application.startDate =
+        response.data.application.startDate.slice(0, 10);
       method.reset(response.data.application);
     } catch (err) {
       console.log(err);
@@ -123,10 +123,11 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
         data,
       );
       response.data.success && setShowModal(false);
-      response.data.success && successSwalFire('Your application is submitted successfully')
+      response.data.success &&
+        successSwalFire("Your application is submitted successfully");
       setFormData(response.data.data);
-    } catch (err : any) {
-      notify(err.response.data.message)
+    } catch (err: any) {
+      notify(err.response.data.message);
     }
   };
 
@@ -142,17 +143,17 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           className="w-[100%] rounded-lg"
           onSubmit={method.handleSubmit(handleFormSubmit)}
         >
-          <div className="bg-[#265077]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
-            <p className=" font-bold mb-5">Personal Information</p>
-            <div className="  grid grid-cols-12 gap-5 ">
+          <div className=" bg-custom-bg bg-opacity-10  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+            <p className=" font-bold mb-5 text-white">Personal Information</p>
+            <div className="  grid grid-cols-12 gap-5 text-white ">
               {personalInputFields.map((ele) => (
                 <GenericInput key={ele?.name} inputProps={ele} />
               ))}
             </div>
           </div>
 
-          <div className="bg-[#265077]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
-            <p className=" font-bold mb-5 text-whi">Contact Details</p>
+          <div className=" bg-custom-bg  max-w-[1200px] mx-auto sm:p-10 p-2 my- text-white rounded-lg">
+            <p className=" font-bold mb-5 text-white">Contact Details</p>
             <div className="  grid grid-cols-12 gap-5 ">
               {contactInputFields.map((ele) => (
                 <GenericInput key={ele?.name} inputProps={ele} />
@@ -160,8 +161,8 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
             </div>
           </div>
 
-          <div className="bg-[#265077]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
-            <p className=" font-bold mb-5">Educational History</p>
+          <div className=" bg-custom-bg  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+            <p className=" font-bold mb-5 text-white">Educational History</p>
             <div className="  grid grid-cols-12 gap-5 ">
               {educaionalInputFields.map((ele) => (
                 <GenericInput key={ele?.name} inputProps={ele} />
@@ -169,13 +170,13 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
             </div>
           </div>
 
-          <div className="bg-[#265077]  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
-            <p className=" font-bold mb-5">Job Details</p>
+          <div className=" bg-custom-bg  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+            <p className=" font-bold mb-5 text-white">Job Details</p>
             <div className="  grid grid-cols-12 gap-5 ">
               <div className=" sm:col-span-6 col-span-12">
-                <div className=" flex flex-col ">
-                  <div className=" font-medium">
-                    What position are you looking for?<sup>*</sup>
+                <div className=" flex flex-col gap-2 ">
+                  <div className=" font-medium text-white">
+                    What position are you looking for?
                   </div>
                   <SelectFormInput
                     valueOptions={availablePositions}
@@ -192,14 +193,12 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           <div className=" flex justify-center mb-5">
             <input
               type="submit"
-              className=" py-2 px-10 bg-[#265077] text-white rounded-sm font-bold hover:cursor-pointer"
+              className=" py-2 px-10 rounded-md bg-custom-bg text-white  font-bold hover:cursor-pointer"
             />
           </div>
         </form>
       </FormProvider>
     </>
-
-
   );
 };
 
