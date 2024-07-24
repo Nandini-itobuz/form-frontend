@@ -7,3 +7,13 @@ export const ApplicationClient = axios.create({
     timeout: 8000,
   },
 });
+
+ApplicationClient.interceptors.response.use(
+  response => {
+    return response.data;
+  },
+  error => {
+    console.error('Error response:', error.response);
+    return Promise.reject(error);
+  }
+);

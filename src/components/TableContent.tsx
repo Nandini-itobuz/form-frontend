@@ -9,23 +9,27 @@ import DetailContentModal from "./DetailContentModal";
 
 interface TableContent {
   inputProps: JobApplication;
+  getAllUser: () => void
 }
 
-const TableContent: FC<TableContent> = ({ inputProps }) => {
+const TableContent: FC<TableContent> = ({ inputProps,getAllUser }) => {
 
   const [showModal, setShowodal] = useState<boolean>(false);
   const [showTableContent, setShowTableContent] = useState(true);
-  const [formData, setFormData] = useState<JobApplication | null>(inputProps);
+  const [formData, setFormData] = useState<JobApplication >(inputProps);
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
 
   const handleDeleteData = async () => {
-    const response = await ApplicationClient.post(`/delete-application`, {
+    await ApplicationClient.post(`/delete-application`, {
       id: inputProps?._id,
     });
-    response.data.success && setShowTableContent(false);
+    getAllUser();
+    setShowTableContent(false);
   };
 
-  
+  const setTableContentData = (data : JobApplication) => {
+    setFormData(data);
+  }
 
   return (
     <>
@@ -82,13 +86,13 @@ const TableContent: FC<TableContent> = ({ inputProps }) => {
         <FormModal
           setShowModal={setShowodal}
           editableId={inputProps?._id}
-          setFormData={setFormData}
+          setTableContentData = {setTableContentData}
         />
       )}
 
       {showDetailModal && (
         <DetailContentModal
-          inputProps={inputProps}
+          inputProps={formData}
           setShowDetailModal={setShowDetailModal}
         />
       )}

@@ -15,6 +15,7 @@ import { IoAddCircle } from "react-icons/io5";
 import FilterData from "../components/FilterData";
 import SearchBar from "../components/SearchBar";
 import { Position } from "../enums/positions";
+import NodataModal from "../components/NodataModal";
 
 const Home = () => {
   const method = useForm();
@@ -22,7 +23,6 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState<string>("1");
   const [allForms, setAllForms] = useState<JobApplication[] | null>([]);
   const [showModal, setShowodal] = useState<boolean>(false);
-  const [_formData, setFormData] = useState<JobApplication | null>(null);
   const [showFilteredPosition, setShowFilteredPosition] =
     useState<string>(Position.ALL);
   const [showPagination, setShowPagination] = useState<boolean>(true);
@@ -32,8 +32,8 @@ const Home = () => {
     const response =
       await ApplicationClient.get(
         `/view-applications/${showFilteredPosition}/${page}/${pageSize}`);
-    setTotalPages(response.data.data.totalPages);
-    setAllForms(response.data.data.applicationData);
+    setTotalPages(response.data.totalPages);
+    setAllForms(response.data.applicationData);
   };
 
   const deleteApplications = async (): Promise<void> => {
@@ -65,7 +65,7 @@ const Home = () => {
       `/search-applications/${showFilteredPosition}`,
       { name },
     );
-    setAllForms(response.data.data.applications);
+    setAllForms(response.data.applications);
   };
 
   useEffect(() => {
@@ -108,12 +108,10 @@ const Home = () => {
       <div className=" max-h-[65vh] overflow-x-scroll no-scrollbar w-[90%] max-w-[1300px] ">
         {allForms && allForms?.length ? (
           allForms.map((ele) => (
-            <TableContent key={ele._id} inputProps={ele} />
+            <TableContent key={ele._id} inputProps={ele} getAllUser={getAllUser} />
           ))
         ) : (
-          <div className="text-white">
-            No data
-          </div>
+          <NodataModal />
         )}
       </div>
 
@@ -157,8 +155,6 @@ const Home = () => {
       {showModal && (
         <FormModal
           setShowModal={setShowodal}
-          editableId={undefined}
-          setFormData={setFormData}
         />
       )}
     </div>

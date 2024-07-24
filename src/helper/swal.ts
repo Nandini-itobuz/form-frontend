@@ -5,7 +5,7 @@ export const handleSwalFire = (
   confirmText: string,
   denyText: string,
   handleFunction: () => void,
-  successText: string,
+  successText: string
 ) => {
   Swal.fire({
     title: titleData,

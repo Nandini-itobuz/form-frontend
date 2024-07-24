@@ -7,10 +7,10 @@ import { JobApplication } from "../interfaces/jobApplication";
 import { Position } from "../enums/positions";
 import { ApplicationClient } from "../config/axiosInstance";
 import { useForm, FormProvider } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import SelectFormInput from "./FormInputs/SelectFormInput";
 import { successSwalFire } from "../helper/swal";
-import { applicationZodSchema } from "../validator/validationFormSchmea";
+import applicationYupSchema from "../validator/validationFormSchmea";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface ApplicationPageInterface {
   setShowModal: Dispatch<SetStateAction<boolean>>;
@@ -23,9 +23,9 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
   editableId,
   setFormData,
 }) => {
-  const notify = (message: string) => toast(message);
+
   const method = useForm<JobApplication>({
-    resolver: zodResolver(applicationZodSchema),
+    resolver: yupResolver(applicationYupSchema),
   });
 
   const inputDetails = [
@@ -67,7 +67,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       ],
     },
     {
-      subtitle: "Educational History",
+      subTitle: "Educational History",
       data: [
         {
           name: "institution",
@@ -107,8 +107,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       const response = await ApplicationClient.get(
         `/view-application/${editableId}`,
       );
-      response.data.application.startDate =
-        response.data.application.startDate.slice(0, 10);
+      response.data.application.startDate = response.data.application.startDate.slice(0, 10);
       method.reset(response.data.application);
     } catch (err) {
       console.log(err);
@@ -123,10 +122,10 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       );
       response.data.success && setShowModal(false);
       response.data.success &&
-        successSwalFire("Your application is submitted successfully");
+      successSwalFire("Your application is submitted successfully");
       setFormData(response.data.data);
     } catch (err: any) {
-      notify(err.response.data.message);
+      toast(err.response.data.message);
     }
   };
 
@@ -143,7 +142,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           onSubmit={method.handleSubmit(handleFormSubmit)}
         >
           {inputDetails.map((ele) => (
-            <div className=" bg-custom-bg bg-opacity-10  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+            <div className=" bg-custom-bg sm:p-10 p-2 my-5 rounded-lg">
               <p className=" font-bold mb-5 text-white">{ele.subTitle}</p>
               <div className="  grid grid-cols-12 gap-5 text-white ">
                 {ele.data.map((ele) => (
@@ -153,7 +152,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
             </div>
           ))}
 
-          <div className=" bg-custom-bg  max-w-[1200px] mx-auto sm:p-10 p-2 my-5 rounded-lg">
+          <div className=" bg-custom-bg sm:p-10 p-2 my-5 rounded-lg">
             <p className=" font-bold mb-5 text-white">Job Details</p>
             <div className="  grid grid-cols-12 gap-5 ">
               <div className=" sm:col-span-6 col-span-12">
@@ -176,7 +175,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
           <div className=" flex justify-center mb-5">
             <input
               type="submit"
-              className=" py-2 px-10 rounded-md bg-custom-bg text-white  font-bold hover:cursor-pointer"
+              className=" py-2 px-10 rounded-md bg-custom-bg text-white font-bold hover:cursor-pointer"
             />
           </div>
         </form>

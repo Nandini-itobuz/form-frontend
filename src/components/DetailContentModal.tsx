@@ -16,7 +16,7 @@ const DetailContentModal: FC<DetailContent> = ({
   setShowDetailModal,
   inputProps,
 }) => {
-  
+
   const detailValues: DetailValueInterface[] = [
     {
       name: "First Name",
@@ -65,33 +65,23 @@ const DetailContentModal: FC<DetailContent> = ({
   ];
 
   return (
-    <div className=" z-10 bg-[#000] bg-opacity-50 top-0 bottom-0 right-0 left-0 absolute flex justify-center items-center">
-      <div className="  bg-[#f5f5f5] rounded-lg flex flex-col items-start xl:w-[50vw] sm:h-[75vh] md:h-[80vh] h-[90vh] w-[85vw] md:w-[80vw] sm:p-8 p-4  gap-2">
-        <div className=" flex justify-between items-center w-[100%]">
-          <div className="flex justify-center sm:text-[25px] text-[20px] font-bold">
-            Hello, {`${inputProps?.firstName} ${inputProps?.lastName}`}
-          </div>
-          <div
-            className=" hover:cursor-pointer"
-            onClick={() => {
-              setShowDetailModal(false);
-            }}
-          >
-            <GiCancel size={"20px"} />
-          </div>
-        </div>
+    <div className=" modal-full-bg">
+      <div className=" modal-bg-white">
+        <GiCancel className=" ms-auto hover:cursor-pointer" onClick={() => {
+          setShowDetailModal(false);
+        }} size={"30px"} />
 
-        <div className=" bg-custom-bg w-[100%] mx-auto sm:p-10 p-2 my-5 rounded-lg overflow-y-scroll no-scrollbar">
+        <div className=" bg-custom-bg w-[100%] sm:p-10 p-2 mt-5 rounded-lg overflow-y-scroll no-scrollbar">
           {detailValues.map(
             (ele) =>
               ele.value && (
-                <div className=" flex flex-col sm:flex-row w-[100%] sm:items-center sm:gap-5 justify-between my-3 ">
-                  <div className=" font-medium text-white">{ele.name}</div>
-                  <div className=" p-2 gap-1  xl:w-[50%] sm:w-[60%] w-[100%] bg-[#37374B] text-white ">
+                <div key={ele.value} className=" flex flex-col sm:flex-row justify-between my-3 text-white font-medium">
+                  <span>{ele.name}</span>
+                  <div className=" p-2 sm:w-[50%] w-[100%] bg-[#37374B] ">
                     {ele.value}
                   </div>
                 </div>
-              ),
+              )
           )}
         </div>
       </div>
