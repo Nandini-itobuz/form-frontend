@@ -137,7 +137,7 @@ const FormModal: FC<FormModalInterface> = ({
         <ToastContainer />
         <GiCancel className=" ms-auto hover:cursor-pointer" onClick={() => { handleFormClose() }} size={"30px"} />
 
-        <div className="overflow-y-scroll no-scrollbar w-[100%]">
+        <div className="overflow-y-scroll no-scrollbar w-[100%] text-white">
           <FormProvider {...method}>
             <form
               className="w-[100%] rounded-lg"
@@ -145,8 +145,8 @@ const FormModal: FC<FormModalInterface> = ({
             >
               {inputDetails.map((ele) => (
                 <div key={ele.subTitle} className=" bg-custom-bg bg-opacity-10 mx-auto sm:p-10 p-2 my-5 rounded-lg">
-                  <p className=" font-bold mb-5 text-white">{ele.subTitle}</p>
-                  <div className="  grid grid-cols-12 gap-5 text-white ">
+                  <p className=" font-bold mb-5 ">{ele.subTitle}</p>
+                  <div className="  grid grid-cols-12 gap-5  ">
                     {ele.data.map((ele) => (
                       <GenericInput key={ele?.name} inputProps={ele} />
                     ))}
@@ -155,11 +155,11 @@ const FormModal: FC<FormModalInterface> = ({
               ))}
 
               <div className=" bg-custom-bg mx-auto sm:p-10 p-2 my-5 rounded-lg">
-                <p className=" font-bold mb-5 text-white">Job Details</p>
+                <p className=" font-bold mb-5 ">Job Details</p>
                 <div className="  grid grid-cols-12 gap-5 ">
                   <div className=" sm:col-span-6 col-span-12">
                     <div className=" flex flex-col gap-2 ">
-                      <span className=" font-medium text-white">
+                      <span className=" font-medium">
                         What position are you looking for?
                       </span>
                       <SelectFormInput
@@ -174,10 +174,10 @@ const FormModal: FC<FormModalInterface> = ({
                 </div>
               </div>
 
-              <div className=" flex justify-center mb-5">
+              <div className="flex justify-center mb-5">
                 <input
                   type="submit"
-                  className=" py-2 px-10 rounded-md bg-custom-bg text-white font-bold hover:cursor-pointer"
+                  className=" py-2 px-10 rounded-md bg-custom-bg font-bold hover:cursor-pointer"
                 />
               </div>
             </form>

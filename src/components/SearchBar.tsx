@@ -10,8 +10,8 @@ interface SearchBarInterface {
 const SearchBar:FC<SearchBarInterface> = ({searchItems}) => {
 	const method = useForm();
 	return (
-		<div className=" flex items-center px-8 rounded-md bg-[#37374B] font-bold w-[260px] ">
-            <FaSearch opacity={0.6} color="#fff" />
+		<div className=" flex items-center px-4 rounded-md bg-[#37374B] font-bold w-[260px] ">
+            <FaSearch opacity={0.6} color="#fff" size={"20px"} />
             <FormProvider {...method}>
               <form
                 onChange={method.handleSubmit(searchItems)}

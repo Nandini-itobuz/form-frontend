@@ -18,6 +18,7 @@ import { Position } from "../enums/positions";
 import NodataModal from "../components/NodataModal";
 
 const Home = () => {
+
   const method = useForm();
   const [page, setPage] = useState<string>("1");
   const [totalPages, setTotalPages] = useState<string>("1");
@@ -26,7 +27,7 @@ const Home = () => {
   const [showFilteredPosition, setShowFilteredPosition] =
     useState<string>(Position.ALL);
   const [showPagination, setShowPagination] = useState<boolean>(true);
-  const [pageSize, setPageSize] = useState<string>("5");
+  const [pageSize, setPageSize] = useState<string>(PageSize.TEN);
 
   const getAllUser = async (): Promise<void> => {
     const response =
@@ -73,32 +74,27 @@ const Home = () => {
   }, [page, pageSize, showFilteredPosition]);
 
   return (
-    <div className="flex flex-col items-center gap-3 p-3 bg-custom-bg bg-cover bg-no-repeat bg-center min-h-[100vh] ">
-
-      <div className=" flex flex-col gap-3 w-[90%]  max-w-[1300px]">
-        <div className=" flex justify-between sm:flex-row flex-col sm:gap-10 gap-1">
+    <div className="home-bg ">
+      <div className=" w-[90%] max-w-[1300px]">
+        <div className=" flex sm:flex-row flex-col justify-between gap-1">
           <Button
             handleClick={() => {
               setShowodal(true);
             }}
-            className="bg-green-700 text-white col-span-1 w-[140px] p-0"
+            className="bg-green-700 w-[140px] flex items-center gap-1"
           >
-            <span className=" flex justify-start items-center gap-1">
-              <IoAddCircle color="#fff" opacity={0.6} size={"20px"} /> Add
-            </span>
+            <><IoAddCircle opacity={0.6} size={"20px"} /> Add</>
           </Button>
           <SearchBar searchItems={searchItems} />
         </div>
 
-        <div className="flex sm:flex-row flex-col justify-between sm:gap-10 gap-1">
+        <div className="flex sm:flex-row flex-col justify-between gap-1 mt-3">
           <Button
-            className=" bg-red-700 text-white w-[140px]"
+            className=" bg-red-700 w-[140px] flex items-center gap-1"
             handleClick={deleteAllApplications}
           >
-            <span className=" flex justify-start items-center gap-1">
-              <RiDeleteBinFill color="#fff" opacity={0.6} size={"20px"} />
-              Delete All
-            </span>
+            <><RiDeleteBinFill opacity={0.6} size={"20px"} />
+            Delete All</>
           </Button>
 
           <FilterData setPage={setPage} setShowFilteredPosition={setShowFilteredPosition} />
@@ -115,9 +111,8 @@ const Home = () => {
         )}
       </div>
 
-
       {showPagination && (
-        <div className=" flex gap-2 mb-10 text-white mt-auto">
+        <div className=" flex flex-wrap justify-center gap-2 text-white mt-auto">
           <Button className=" border " handleClick={() => { Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString()); }}>
             <FaBackward opacity={0.6} size={"15px"} />
           </Button>

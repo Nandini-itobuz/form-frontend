@@ -8,7 +8,7 @@ interface ButtonProps {
 export const Button= ({ children, handleClick, className } : ButtonProps) => {
   return (
     <button
-      className={` rounded-md p-2  font-bold ${className}`}
+      className={` rounded-md p-2 text-white font-bold ${className}`}
       onClick={handleClick}
     >
       {children}
