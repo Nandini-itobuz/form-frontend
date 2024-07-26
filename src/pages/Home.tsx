@@ -18,21 +18,21 @@ import { Position } from "../enums/positions";
 import NodataModal from "../components/NodataModal";
 
 const Home = () => {
-
   const method = useForm();
   const [page, setPage] = useState<string>("1");
   const [totalPages, setTotalPages] = useState<string>("1");
   const [allForms, setAllForms] = useState<JobApplication[] | null>([]);
   const [showModal, setShowodal] = useState<boolean>(false);
-  const [showFilteredPosition, setShowFilteredPosition] =
-    useState<string>(Position.ALL);
+  const [showFilteredPosition, setShowFilteredPosition] = useState<string>(
+    Position.ALL,
+  );
   const [showPagination, setShowPagination] = useState<boolean>(true);
   const [pageSize, setPageSize] = useState<string>(PageSize.TEN);
 
   const getAllUser = async (): Promise<void> => {
-    const response =
-      await ApplicationClient.get(
-        `/view-applications/${showFilteredPosition}/${page}/${pageSize}`);
+    const response = await ApplicationClient.get(
+      `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
+    );
     setTotalPages(response.data.totalPages);
     setAllForms(response.data.applicationData);
   };
@@ -83,7 +83,9 @@ const Home = () => {
             }}
             className="bg-green-700 w-[140px] flex items-center gap-1"
           >
-            <><IoAddCircle opacity={0.6} size={"20px"} /> Add</>
+            <>
+              <IoAddCircle opacity={0.6} size={"20px"} /> Add
+            </>
           </Button>
           <SearchBar searchItems={searchItems} />
         </div>
@@ -93,18 +95,27 @@ const Home = () => {
             className=" bg-red-700 w-[140px] flex items-center gap-1"
             handleClick={deleteAllApplications}
           >
-            <><RiDeleteBinFill opacity={0.6} size={"20px"} />
-            Delete All</>
+            <>
+              <RiDeleteBinFill opacity={0.6} size={"20px"} />
+              Delete All
+            </>
           </Button>
 
-          <FilterData setPage={setPage} setShowFilteredPosition={setShowFilteredPosition} />
+          <FilterData
+            setPage={setPage}
+            setShowFilteredPosition={setShowFilteredPosition}
+          />
         </div>
       </div>
 
       <div className=" max-h-[65vh] overflow-x-scroll no-scrollbar w-[90%] max-w-[1300px] ">
         {allForms && allForms?.length ? (
           allForms.map((ele) => (
-            <TableContent key={ele._id} inputProps={ele} getAllUser={getAllUser} />
+            <TableContent
+              key={ele._id}
+              inputProps={ele}
+              getAllUser={getAllUser}
+            />
           ))
         ) : (
           <NodataModal />
@@ -113,7 +124,12 @@ const Home = () => {
 
       {showPagination && (
         <div className=" flex flex-wrap justify-center gap-2 text-white mt-auto">
-          <Button className=" border " handleClick={() => { Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString()); }}>
+          <Button
+            className=" border "
+            handleClick={() => {
+              Number(page) - 1 >= 1 && setPage((Number(page) - 1).toString());
+            }}
+          >
             <FaBackward opacity={0.6} size={"15px"} />
           </Button>
 
@@ -121,10 +137,13 @@ const Home = () => {
             {page} of {totalPages}
           </p>
 
-          <Button className=" border" handleClick={() => {
-            Number(page) + 1 <= Number(totalPages) &&
-              setPage((Number(page) + 1).toString());
-          }}>
+          <Button
+            className=" border"
+            handleClick={() => {
+              Number(page) + 1 <= Number(totalPages) &&
+                setPage((Number(page) + 1).toString());
+            }}
+          >
             <FaForward opacity={0.6} size={"15px"} />
           </Button>
 
@@ -147,11 +166,7 @@ const Home = () => {
         </div>
       )}
 
-      {showModal && (
-        <FormModal
-          setShowModal={setShowodal}
-        />
-      )}
+      {showModal && <FormModal setShowModal={setShowodal} />}
     </div>
   );
 };

@@ -15,7 +15,7 @@ const applicationYupSchema = yup.object().shape({
     .required("Please enter age")
     .typeError("Please enter age")
     .min(18, "You are not eligible.")
-    .max(100, 'You are too old for the post'),
+    .max(100, "You are too old for the post"),
   email: yup.string().required("Please enter email id").email(),
   phone: yup
     .string()
@@ -29,7 +29,7 @@ const applicationYupSchema = yup.object().shape({
     .number()
     .required("Please enter your score")
     .typeError("Please enter your score")
-    .max(100, 'Max score can be 100'),
+    .max(100, "Max score can be 100"),
   yearsOfExperience: yup
     .number()
     .required("Please enter your experience in years")

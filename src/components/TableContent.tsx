@@ -9,14 +9,13 @@ import DetailContentModal from "./DetailContentModal";
 
 interface TableContent {
   inputProps: JobApplication;
-  getAllUser: () => void
+  getAllUser: () => void;
 }
 
-const TableContent: FC<TableContent> = ({ inputProps,getAllUser }) => {
-
+const TableContent: FC<TableContent> = ({ inputProps, getAllUser }) => {
   const [showModal, setShowodal] = useState<boolean>(false);
   const [showTableContent, setShowTableContent] = useState(true);
-  const [formData, setFormData] = useState<JobApplication >(inputProps);
+  const [formData, setFormData] = useState<JobApplication>(inputProps);
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
 
   const handleDeleteData = async () => {
@@ -27,9 +26,9 @@ const TableContent: FC<TableContent> = ({ inputProps,getAllUser }) => {
     setShowTableContent(false);
   };
 
-  const setTableContentData = (data : JobApplication) => {
+  const setTableContentData = (data: JobApplication) => {
     setFormData(data);
-  }
+  };
 
   return (
     <>
@@ -86,7 +85,7 @@ const TableContent: FC<TableContent> = ({ inputProps,getAllUser }) => {
         <FormModal
           setShowModal={setShowodal}
           editableId={inputProps?._id}
-          setTableContentData = {setTableContentData}
+          setTableContentData={setTableContentData}
         />
       )}
 

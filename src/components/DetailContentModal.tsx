@@ -16,7 +16,6 @@ const DetailContentModal: FC<DetailContent> = ({
   setShowDetailModal,
   inputProps,
 }) => {
-
   const detailValues: DetailValueInterface[] = [
     {
       name: "First Name",
@@ -67,21 +66,28 @@ const DetailContentModal: FC<DetailContent> = ({
   return (
     <div className=" modal-full-bg">
       <div className=" modal-bg-white">
-        <GiCancel className=" ms-auto hover:cursor-pointer" onClick={() => {
-          setShowDetailModal(false);
-        }} size={"30px"} />
+        <GiCancel
+          className=" ms-auto hover:cursor-pointer"
+          onClick={() => {
+            setShowDetailModal(false);
+          }}
+          size={"30px"}
+        />
 
         <div className=" bg-custom-bg w-[100%] sm:p-10 p-2 mt-5 rounded-lg overflow-y-scroll no-scrollbar">
           {detailValues.map(
             (ele) =>
               ele.value && (
-                <div key={ele.value} className=" flex flex-col sm:flex-row justify-between my-3 text-white font-medium">
+                <div
+                  key={ele.value}
+                  className=" flex flex-col sm:flex-row justify-between my-3 text-white font-medium"
+                >
                   <span>{ele.name}</span>
                   <div className=" p-2 sm:w-[50%] w-[100%] bg-[#37374B] ">
                     {ele.value}
                   </div>
                 </div>
-              )
+              ),
           )}
         </div>
       </div>

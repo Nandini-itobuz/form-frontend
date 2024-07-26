@@ -9,11 +9,11 @@ export const ApplicationClient = axios.create({
 });
 
 ApplicationClient.interceptors.response.use(
-  response => {
+  (response) => {
     return response.data;
   },
-  error => {
-    console.error('Error response:', error.response);
+  (error) => {
+    console.error("Error response:", error.response);
     return Promise.reject(error);
-  }
+  },
 );

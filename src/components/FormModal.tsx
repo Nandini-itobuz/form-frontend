@@ -13,16 +13,15 @@ import { Position } from "../enums/positions";
 
 interface FormModalInterface {
   setShowModal: Dispatch<SetStateAction<boolean>>;
-  editableId?: string | null | undefined
-  setTableContentData?: (data: JobApplication) => void
+  editableId?: string | null | undefined;
+  setTableContentData?: (data: JobApplication) => void;
 }
 
 const FormModal: FC<FormModalInterface> = ({
   setShowModal,
   editableId,
-  setTableContentData
+  setTableContentData,
 }) => {
-
   const inputDetails = [
     {
       subTitle: "Personal Information",
@@ -119,10 +118,10 @@ const FormModal: FC<FormModalInterface> = ({
         { ...editedData, _id: editableId },
       );
       setShowModal(false);
-      setTableContentData && setTableContentData(data)
+      setTableContentData && setTableContentData(data);
       successSwalFire("Your application is submitted successfully");
     } catch (err: any) {
-      console.log(err)
+      console.log(err);
       toast(err.response.data.message);
     }
   };
@@ -135,7 +134,13 @@ const FormModal: FC<FormModalInterface> = ({
     <div className=" modal-full-bg">
       <div className=" modal-bg-white">
         <ToastContainer />
-        <GiCancel className=" ms-auto hover:cursor-pointer" onClick={() => { handleFormClose() }} size={"30px"} />
+        <GiCancel
+          className=" ms-auto hover:cursor-pointer"
+          onClick={() => {
+            handleFormClose();
+          }}
+          size={"30px"}
+        />
 
         <div className="overflow-y-scroll no-scrollbar w-[100%] text-white">
           <FormProvider {...method}>
@@ -144,7 +149,10 @@ const FormModal: FC<FormModalInterface> = ({
               onSubmit={method.handleSubmit(handleFormSubmit)}
             >
               {inputDetails.map((ele) => (
-                <div key={ele.subTitle} className=" bg-custom-bg bg-opacity-10 mx-auto sm:p-10 p-2 my-5 rounded-lg">
+                <div
+                  key={ele.subTitle}
+                  className=" bg-custom-bg bg-opacity-10 mx-auto sm:p-10 p-2 my-5 rounded-lg"
+                >
                   <p className=" font-bold mb-5 ">{ele.subTitle}</p>
                   <div className="  grid grid-cols-12 gap-5  ">
                     {ele.data.map((ele) => (
@@ -189,5 +197,3 @@ const FormModal: FC<FormModalInterface> = ({
 };
 
 export default FormModal;
-
-

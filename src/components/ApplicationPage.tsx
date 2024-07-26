@@ -11,6 +11,7 @@ import SelectFormInput from "./FormInputs/SelectFormInput";
 import { successSwalFire } from "../helper/swal";
 import applicationYupSchema from "../validator/validationFormSchmea";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { inputDetails, jobInputFields } from "../data/formInputDetails";
 
 interface ApplicationPageInterface {
   setShowModal: Dispatch<SetStateAction<boolean>>;
@@ -23,81 +24,9 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
   editableId,
   setFormData,
 }) => {
-
   const method = useForm<JobApplication>({
     resolver: yupResolver(applicationYupSchema),
   });
-
-  const inputDetails = [
-    {
-      subTitle: "Personal Information",
-      data: [
-        {
-          name: "firstName",
-          title: "First Name",
-        },
-        {
-          name: "middleName",
-          required: false,
-          title: "Middle Name",
-        },
-        {
-          name: "lastName",
-          title: "Last Name",
-        },
-        {
-          name: "age",
-          type: "number",
-          title: "Age",
-        },
-      ],
-    },
-    {
-      subTitle: "Contact Details",
-      data: [
-        {
-          name: "phone",
-          type: "tel",
-          title: "Phone Number",
-        },
-        {
-          name: "email",
-          title: "Email Id",
-        },
-      ],
-    },
-    {
-      subTitle: "Educational History",
-      data: [
-        {
-          name: "institution",
-          title: "Institution/University",
-        },
-        {
-          name: "degree",
-          title: "Degree",
-        },
-        {
-          name: "score",
-          type: "number",
-          title: "Score",
-        },
-        {
-          name: "startDate",
-          type: "date",
-          title: "Start Date",
-        },
-      ],
-    },
-  ];
-
-  const jobInputFields = [
-    {
-      name: "yearsOfExperience",
-      type: "number",
-      title: "Years Of Experience",
-    },
-  ];
 
   const handleFormEdit = async (): Promise<void> => {
     try {
@@ -107,7 +36,8 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       const response = await ApplicationClient.get(
         `/view-application/${editableId}`,
       );
-      response.data.application.startDate = response.data.application.startDate.slice(0, 10);
+      response.data.application.startDate =
+        response.data.application.startDate.slice(0, 10);
       method.reset(response.data.application);
     } catch (err) {
       console.log(err);
@@ -122,7 +52,7 @@ const ApplicationPage: FC<ApplicationPageInterface> = ({
       );
       response.data.success && setShowModal(false);
       response.data.success &&
-      successSwalFire("Your application is submitted successfully");
+        successSwalFire("Your application is submitted successfully");
       setFormData(response.data.data);
     } catch (err: any) {
       toast(err.response.data.message);

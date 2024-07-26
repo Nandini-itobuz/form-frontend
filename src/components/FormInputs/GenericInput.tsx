@@ -12,14 +12,14 @@ const GenericInput: FC<GenericInputProps> = ({ inputProps }) => {
   const {
     register,
     formState: { errors },
-    control
+    control,
   } = useFormContext();
 
-  const { name } = { ...inputProps }
+  const { name } = { ...inputProps };
   const { field } = useController<HTMLInputElement, string>({
     name,
-    control
-  })
+    control,
+  });
 
   return (
     <div key={inputProps.name} className=" sm:col-span-6 col-span-12  ">
