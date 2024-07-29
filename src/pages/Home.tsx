@@ -16,10 +16,12 @@ import FilterData from "../components/FilterData";
 import SearchBar from "../components/SearchBar";
 import { Position } from "../enums/positions";
 import NodataModal from "../components/NodataModal";
+import { debounce } from "lodash";
 
 const Home = () => {
   const method = useForm();
   const [page, setPage] = useState<string>("1");
+  // const [searchItem, setSearchItem] = useState<string>('');
   const [totalPages, setTotalPages] = useState<string>("1");
   const [allForms, setAllForms] = useState<JobApplication[] | null>([]);
   const [showModal, setShowodal] = useState<boolean>(false);
@@ -33,8 +35,10 @@ const Home = () => {
     const response = await ApplicationClient.get(
       `/view-applications/${showFilteredPosition}/${page}/${pageSize}`,
     );
-    setTotalPages(response.data.totalPages);
-    setAllForms(response.data.applicationData);
+    if (response.status) {
+      setTotalPages(response.data.totalPages);
+      setAllForms(response.data.applicationData);
+    }
   };
 
   const deleteApplications = async (): Promise<void> => {
@@ -54,6 +58,14 @@ const Home = () => {
       "Deleted Successfully!",
     );
 
+  const debounceSearch = debounce(async (name) => {
+    const response = await ApplicationClient.post(
+      `/search-applications/${showFilteredPosition}`,
+      { name },
+    );
+    setAllForms(response.data.applications);
+  }, 400);
+
   const searchItems = async (data: { [key: string]: string }) => {
     const name = data.searchBar.trim();
     if (!name.length) {
@@ -61,12 +73,8 @@ const Home = () => {
       getAllUser();
       return;
     }
+    debounceSearch(name);
     setShowPagination(false);
-    const response = await ApplicationClient.post(
-      `/search-applications/${showFilteredPosition}`,
-      { name },
-    );
-    setAllForms(response.data.applications);
   };
 
   useEffect(() => {

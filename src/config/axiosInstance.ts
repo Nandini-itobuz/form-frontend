@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const ApplicationClient = axios.create({
   baseURL: "http://localhost:4000/",
@@ -9,7 +9,7 @@ export const ApplicationClient = axios.create({
 });
 
 ApplicationClient.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse<any, any>) => {
     return response.data;
   },
   (error) => {

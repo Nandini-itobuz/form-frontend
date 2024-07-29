@@ -5,11 +5,11 @@ import { ApplicationClient } from "../config/axiosInstance";
 import { successSwalFire } from "../helper/swal";
 import { toast, ToastContainer } from "react-toastify";
 import { FormProvider, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import applicationYupSchema from "../validator/validationFormSchmea";
 import GenericInput from "./FormInputs/GenericInput";
 import SelectFormInput from "./FormInputs/SelectFormInput";
 import { Position } from "../enums/positions";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface FormModalInterface {
   setShowModal: Dispatch<SetStateAction<boolean>>;

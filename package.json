@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "@types/lodash": "^4.17.7",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "lottie-react": "^2.4.0",

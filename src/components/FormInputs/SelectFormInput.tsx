@@ -13,7 +13,7 @@ const SelectFormInput: FC<selectInputInterface> = ({ name, valueOptions }) => {
   return (
     <div>
       <select
-        {...register(name as keyof JobApplication, { required: true })}
+        {...register(name as keyof JobApplication)}
         className=" rounded-md py-2 px-3 gap-1 w-[100%] bg-[#37374B] text-white outline-none "
       >
         {valueOptions?.map((ele) => (
